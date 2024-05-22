@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const HomeScreen(),
+      home: const VistaInicial(),
       routes: {
         '/register': (context) => const RegisterScreen(),
       },
@@ -17,8 +17,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class VistaInicial extends StatelessWidget {
+  const VistaInicial({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,58 +39,64 @@ class HomeScreen extends StatelessWidget {
           ),
           // Contenido principal en la mitad inferior
           Expanded(
-            child: Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Título
-                  const Text(
-                    '',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Título
+                const Text(
+                  '¡Bienvenido!',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black
+                  ),
+                ),
+                const SizedBox(height: 20),
+                // Botón de Iniciar Sesión
+                SizedBox(
+                  width: 200, // Ancho fijo para los botones
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Acción de iniciar sesión
+                    },
+                    style: ElevatedButton.styleFrom(
+                      elevation: 15, // Elevación del botón
+                      backgroundColor: Colors.pink, // Color de fondo del botón
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      shape: const StadiumBorder(
+                        side: BorderSide(color: Colors.black, width: 1.5),
+                      )
+                    ),
+                    child: const Text(
+                      'Iniciar Sesión',
+                      style: TextStyle(fontSize: 18, color: Colors.black),
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  // Botón de Iniciar Sesión
-                  SizedBox(
-                    width: 200, // Ancho fijo para los botones
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Acción de iniciar sesión
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.pink, // Color de fondo del botón
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                      ),
-                      child: const Text(
-                        'Iniciar Sesión',
-                        style: TextStyle(fontSize: 18, color: Colors.black),
-                      ),
+                ),
+                const SizedBox(height: 20),
+                // Botón de Registrarse
+                SizedBox(
+                  width: 200, // Ancho fijo para los botones
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Navegar a la pantalla de registro
+                      Navigator.pushNamed(context, '/register');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      elevation: 15, // Elevación del botón
+                      backgroundColor: Colors.pink, // Color de fondo del botón
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      shape: const StadiumBorder(
+                        side: BorderSide(color: Colors.black, width: 1.5),
+                      )
+                    ),
+                    child: const Text(
+                      'Registrarse',
+                      style: TextStyle(fontSize: 18, color: Colors.black),
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  // Botón de Registrarse
-                  SizedBox(
-                    width: 200, // Ancho fijo para los botones
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Navegar a la pantalla de registro
-                        Navigator.pushNamed(context, '/register');
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.pink, // Color de fondo del botón
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                      ),
-                      child: const Text(
-                        'Registrarse',
-                        style: TextStyle(fontSize: 18, color: Colors.black),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],
