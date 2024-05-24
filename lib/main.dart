@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'register.dart'; // Importa el archivo de la nueva ventana
+import 'register.dart';
+import 'login.dart';
 
 void main() => runApp(const MyApp());
 
@@ -12,6 +13,7 @@ class MyApp extends StatelessWidget {
       home: const VistaInicial(),
       routes: {
         '/register': (context) => const RegisterScreen(),
+        '/Login': (context) => const Login(),
       },
     );
   }
@@ -58,6 +60,7 @@ class VistaInicial extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       // Acción de iniciar sesión
+                      Navigator.pushNamed(context, '/Login');
                     },
                     style: ElevatedButton.styleFrom(
                       elevation: 15, // Elevación del botón

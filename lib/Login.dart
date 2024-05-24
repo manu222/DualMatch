@@ -4,25 +4,22 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'Usuario.dart';
 
-
-
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class Login extends StatefulWidget {
+  const Login({super.key});
 
   @override
-  _RegisterScreenState createState() => _RegisterScreenState();
+  _LoginState createState() => _LoginState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _LoginState extends State<Login> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  String? _nameError= '';
-  String? _passwordError= '';
+  String? _nameError = '';
+  String? _passwordError = '';
 
   Future<File> _getLocalFile() async {
     final directory = await getApplicationDocumentsDirectory();
     final path = '${directory.path}/users.json';
-    print("-----------------------------------------------------------------------------"+path); // Imprime la ruta del archivo (opcional
     final file = File(path);
     file.createSync(recursive: true);
     return file;
@@ -38,17 +35,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  Future<void> _saveUser(String name, String password) async {
+  Future<bool> _authenticateUser(String name, String password) async {
     final users = await _readUsers();
-    users[name] = Usuario(
-      nombre: name,
-      contrasena: password,
-      likes: [],
-      matches: [],
-      chats: [],
-    ).toJson();
-    final file = await _getLocalFile();
-    file.writeAsString(jsonEncode(users));
+    if (users.containsKey(name)) {
+      final user = Usuario.fromJson(users[name]);
+      return user.contrasena == password;
+    }
+    return false;
   }
 
   @override
@@ -56,7 +49,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        title: const Text('Registro'),
+        title: const Text('Login'),
         backgroundColor: Colors.pink,
       ),
       backgroundColor: Colors.pink[100],
@@ -71,8 +64,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 filled: true,
                 fillColor: Colors.grey[200],
                 labelText: 'Nombre',
-                labelStyle: const TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 15),
-                errorText: _nameError=='' ? null : _nameError,
+                labelStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15),
+                errorText: _nameError == '' ? null : _nameError,
+                hintText: 'Introduce tu nombre de usuario',
+                hintStyle: TextStyle(color: Colors.grey[600]),
               ),
             ),
             const SizedBox(height: 20),
@@ -82,12 +77,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 filled: true,
                 fillColor: Colors.grey[200],
                 labelText: 'Contraseña',
-                labelStyle: const TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 15),
-                errorText: _passwordError=='' ? null : _passwordError,
+                labelStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15),
+                errorText: _passwordError == '' ? null : _passwordError,
+                hintText: 'Introduce tu contraseña',
+                hintStyle: TextStyle(color: Colors.grey[600]),
               ),
               obscureText: true,
             ),
-            const SizedBox(height:100),
+            const SizedBox(height: 100),
             SizedBox(
               width: 200,
               child: ElevatedButton(
@@ -105,19 +102,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     );
                   } else {
-                    await _saveUser(name, password);
-                    Navigator.pop(context); // Regresar a la pantalla principal
+                    final isAuthenticated = await _authenticateUser(name, password);
+                    if (isAuthenticated) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Inicio de sesión exitoso'),
+                        ),
+                      );
+                      Navigator.pop(context); // Regresar a la pantalla principal
+                    } else {
+                      setState(() {
+                        _nameError = 'Nombre o contraseña incorrectos';
+                        _passwordError = 'Nombre o contraseña incorrectos';
+                      });
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Nombre o contraseña incorrectos'),
+                        ),
+                      );
+                    }
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.pink, // Color del botón
+                  backgroundColor: Colors.pink,
                   padding: const EdgeInsets.symmetric(vertical: 15),
-                    shape: const StadiumBorder(
-                      side: BorderSide(color: Colors.black, width: 1.5),
-                    )
+                  shape: const StadiumBorder(
+                    side: BorderSide(color: Colors.black, width: 1.5),
+                  ),
                 ),
                 child: const Text(
-                  'Registrarse',
+                  'Iniciar Sesión',
                   style: TextStyle(fontSize: 18, color: Colors.black),
                 ),
               ),
