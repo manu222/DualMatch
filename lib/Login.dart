@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'dart:io';
-import 'package:path_provider/path_provider.dart';
-import 'Usuario.dart';
+import 'Home.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -17,32 +14,6 @@ class _LoginState extends State<Login> {
   String? _nameError = '';
   String? _passwordError = '';
 
-  Future<File> _getLocalFile() async {
-    final directory = await getApplicationDocumentsDirectory();
-    final path = '${directory.path}/users.json';
-    final file = File(path);
-    file.createSync(recursive: true);
-    return file;
-  }
-
-  Future<Map<String, dynamic>> _readUsers() async {
-    try {
-      final file = await _getLocalFile();
-      String contents = await file.readAsString();
-      return jsonDecode(contents);
-    } catch (e) {
-      return {};
-    }
-  }
-
-  Future<bool> _authenticateUser(String name, String password) async {
-    final users = await _readUsers();
-    if (users.containsKey(name)) {
-      final user = Usuario.fromJson(users[name]);
-      return user.contrasena == password;
-    }
-    return false;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,14 +73,19 @@ class _LoginState extends State<Login> {
                       ),
                     );
                   } else {
-                    final isAuthenticated = await _authenticateUser(name, password);
+                    final isAuthenticated = true;
                     if (isAuthenticated) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('Inicio de sesión exitoso'),
                         ),
                       );
-                      Navigator.pop(context); // Regresar a la pantalla principal
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PantallaPrincipal(),
+                        ),
+                      );
                     } else {
                       setState(() {
                         _nameError = 'Nombre o contraseña incorrectos';

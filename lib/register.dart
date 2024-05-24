@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'dart:io';
-import 'package:path_provider/path_provider.dart';
-import 'Usuario.dart';
 
 
 
@@ -19,37 +15,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String? _nameError= '';
   String? _passwordError= '';
 
-  Future<File> _getLocalFile() async {
-    final directory = await getApplicationDocumentsDirectory();
-    final path = '${directory.path}/users.json';
-    print("-----------------------------------------------------------------------------"+path); // Imprime la ruta del archivo (opcional
-    final file = File(path);
-    file.createSync(recursive: true);
-    return file;
-  }
 
-  Future<Map<String, dynamic>> _readUsers() async {
-    try {
-      final file = await _getLocalFile();
-      String contents = await file.readAsString();
-      return jsonDecode(contents);
-    } catch (e) {
-      return {};
-    }
-  }
 
-  Future<void> _saveUser(String name, String password) async {
-    final users = await _readUsers();
-    users[name] = Usuario(
-      nombre: name,
-      contrasena: password,
-      likes: [],
-      matches: [],
-      chats: [],
-    ).toJson();
-    final file = await _getLocalFile();
-    file.writeAsString(jsonEncode(users));
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +73,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     );
                   } else {
-                    await _saveUser(name, password);
                     Navigator.pop(context); // Regresar a la pantalla principal
                   }
                 },

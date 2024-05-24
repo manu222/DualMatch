@@ -1,13 +1,17 @@
+import 'Matches.dart';
+
 class Usuario {
   String nombre;
   String contrasena;
+  Usuario amigo;
   List<String> likes;
-  List<String> matches;
+  List<Matches> matches;
   List<String> chats;
 
   Usuario({
     required this.nombre,
     required this.contrasena,
+    required this.amigo,
     required this.likes,
     required this.matches,
     required this.chats,
@@ -16,18 +20,13 @@ class Usuario {
   Map<String, dynamic> toJson() => {
     'nombre': nombre,
     'contrasena': contrasena,
+    'amigo': amigo.nombre,
     'likes': likes,
     'matches': matches,
     'chats': chats,
   };
 
-  factory Usuario.fromJson(Map<String, dynamic> json) {
-    return Usuario(
-      nombre: json['nombre'],
-      contrasena: json['contrasena'],
-      likes: List<String>.from(json['likes']),
-      matches: List<String>.from(json['matches']),
-      chats: List<String>.from(json['chats']),
-    );
+
   }
-}
+
+
