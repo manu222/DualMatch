@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'Home.dart';
+import 'Matches.dart';
+import 'Usuario.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -14,6 +16,81 @@ class _LoginState extends State<Login> {
   String? _nameError = '';
   String? _passwordError = '';
 
+   late Usuario user1;
+   late Usuario user2;
+   late Usuario user3;
+   late Usuario user4;
+
+  @override
+  void initState() {
+    super.initState();
+    user1 = Usuario(
+      nombre: 'user1',
+      contrasena: '1234',
+      amigo: null,
+      likes: [],
+      matches: [],
+      chats: [],
+    );
+    user2 = Usuario(
+      nombre: 'user2',
+      contrasena: '1234',
+      amigo: null,
+      likes: [],
+      matches: [],
+      chats: [],
+    );
+    user3 = Usuario(
+      nombre: 'user3',
+      contrasena: '1234',
+      amigo: null,
+      likes: [],
+      matches: [],
+      chats: [],
+    );
+    user4 = Usuario(
+      nombre: 'user4',
+      contrasena: '1234',
+      amigo: null,
+      likes: [],
+      matches: [],
+      chats: [],
+    );
+
+    user1.setAmigo(user2);
+    user2.setAmigo(user1);
+    user3.setAmigo(user4);
+    user4.setAmigo(user3);
+
+    user1.setLikes([user3]);
+    user2.setLikes([user4]);
+    user3.setLikes([user1]);
+    user4.setLikes([user2]);
+
+    List<Matches> matches1 = [Matches(usuarios: [user3, user4])];
+    List<Matches> matches2 = [Matches(usuarios: [user1, user2])];
+
+    user1.setMatches(matches1);
+    user2.setMatches(matches1);
+    user3.setMatches(matches2);
+    user4.setMatches(matches2);
+
+    user1.setChats([user2.nombre, user3.nombre, user4.nombre]);
+    user2.setChats([user1.nombre, user3.nombre, user4.nombre]);
+    user3.setChats([user1.nombre, user2.nombre, user4.nombre]);
+    user4.setChats([user1.nombre, user2.nombre, user3.nombre]);
+
+  }
+
+  bool isAuthenticated(String name, String password) {
+    List<Usuario> usuarios = [user1, user2, user3, user4];
+    for (var usuario in usuarios) {
+      if (usuario.nombre == name && usuario.contrasena == password) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,8 +150,7 @@ class _LoginState extends State<Login> {
                       ),
                     );
                   } else {
-                    final isAuthenticated = true;
-                    if (isAuthenticated) {
+                    if (isAuthenticated(name, password)) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('Inicio de sesión exitoso'),
@@ -83,7 +159,12 @@ class _LoginState extends State<Login> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => PantallaPrincipal(),
+                          builder: (context) => PantallaPrincipal(
+                            user1: user1,
+                            user2: user2,
+                            user3: user3,
+                            user4: user4,
+                          ),
                         ),
                       );
                     } else {

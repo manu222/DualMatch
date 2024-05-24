@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'register.dart';
 import 'login.dart';
-import 'Home.dart';
+
 
 void main() => runApp(const MyApp());
 
@@ -15,7 +15,6 @@ class MyApp extends StatelessWidget {
       routes: {
         '/register': (context) => const RegisterScreen(),
         '/Login': (context) => const Login(),
-        '/Home': (context) => PantallaPrincipal(),
         '/main': (context) => const VistaInicial(),
       },
     );
@@ -101,6 +100,9 @@ class VistaInicial extends StatelessWidget {
                       style: TextStyle(fontSize: 18, color: Colors.black),
                     ),
                   ),
+                ),
+                const SizedBox(height: 20),
+                const Text('¡Citas dobles para el doble de diversión!',style: TextStyle(fontSize: 12, color: Colors.black)
                 ),
               ],
             ),
