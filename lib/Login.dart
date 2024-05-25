@@ -25,7 +25,7 @@ class _LoginState extends State<Login> {
   void initState() {
     super.initState();
     user1 = Usuario(
-      nombre: 'user1',
+      nombre: 'Sandra',
       contrasena: '1234',
       amigo: null,
       likes: [],
@@ -33,7 +33,7 @@ class _LoginState extends State<Login> {
       chats: [],
     );
     user2 = Usuario(
-      nombre: 'user2',
+      nombre: 'Maria',
       contrasena: '1234',
       amigo: null,
       likes: [],
@@ -41,7 +41,7 @@ class _LoginState extends State<Login> {
       chats: [],
     );
     user3 = Usuario(
-      nombre: 'user3',
+      nombre: 'Carlos',
       contrasena: '1234',
       amigo: null,
       likes: [],
@@ -49,7 +49,7 @@ class _LoginState extends State<Login> {
       chats: [],
     );
     user4 = Usuario(
-      nombre: 'user4',
+      nombre: 'Pedro',
       contrasena: '1234',
       amigo: null,
       likes: [],
