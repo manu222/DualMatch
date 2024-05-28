@@ -62,35 +62,40 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
                   width: 120,
                   height: 120,
                   child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.pink.shade900),
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                        Colors.pink.shade900),
                   ),
                 ),
                 SizedBox(
                   width: 110,
                   height: 110,
                   child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.pink.shade800),
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                        Colors.pink.shade800),
                   ),
                 ),
                 SizedBox(
                   width: 100,
                   height: 100,
                   child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.pink.shade700),
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                        Colors.pink.shade700),
                   ),
                 ),
                 SizedBox(
                   width: 90,
                   height: 90,
                   child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.pink.shade500),
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                        Colors.pink.shade500),
                   ),
                 ),
                 SizedBox(
                   width: 80,
                   height: 80,
                   child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.pink.shade200),
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                        Colors.pink.shade200),
                   ),
                 ),
                 Image.asset(
@@ -125,25 +130,26 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
             default:
               userName = 'Usuario desconocido';
           }
+
           return Positioned.fill(
-            child: Dismissible(
-              key: UniqueKey(),
-              direction: DismissDirection.horizontal,
-              onDismissed: (direction) {
-                IconData icono = Icons.error;
-                if (direction == DismissDirection.endToStart) {
-                  icono = Icons.close;
-                } else if (direction == DismissDirection.startToEnd) {
-                  icono = Icons.favorite;
-                }
-                mostrarIconoFlotante(context, icono);
-                setState(() {
-                  images.remove(image);
-                });
-              },
-              child: Stack(
-                children: [
-                  Container(
+            child: Stack(
+              children: [
+                Dismissible(
+                  key: UniqueKey(),
+                  direction: DismissDirection.horizontal,
+                  onDismissed: (direction) {
+                    IconData icono = Icons.error;
+                    if (direction == DismissDirection.endToStart) {
+                      icono = Icons.close;
+                    } else if (direction == DismissDirection.startToEnd) {
+                      icono = Icons.favorite;
+                    }
+                    mostrarIconoFlotante(context, icono);
+                    setState(() {
+                      images.remove(image);
+                    });
+                  },
+                  child: Container(
                     margin: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
@@ -152,61 +158,81 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
                         fit: BoxFit.cover,
                       ),
                     ),
+                    child: Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.5),
+                          borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                          ),
+                        ),
+                        child: Text(
+                          userName,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                  Positioned(
-                    left: 20,
-                    top: 0,
-                    bottom: 0,
+                ),
+                Positioned(
+                  left: 20,
+                  top: 0,
+                  bottom: 0,
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        images.removeAt(index);
+                        mostrarIconoFlotante(context, Icons.close);
+                      });
+                    },
                     child: Container(
                       width: 50,
                       height: 50,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.white60,
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(
+                      child: const Icon(
                         Icons.close,
                         color: Colors.red,
                       ),
                     ),
                   ),
-                  Positioned(
-                    right: 20,
-                    top: 0,
-                    bottom: 0,
+                ),
+                Positioned(
+                  right: 20,
+                  top: 0,
+                  bottom: 0,
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        images.removeAt(index);
+                        mostrarIconoFlotante(context, Icons.favorite);
+                      });
+                    },
                     child: Container(
                       width: 50,
                       height: 50,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.white60,
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(
+                      child: const Icon(
                         Icons.favorite,
                         color: Colors.green,
                       ),
                     ),
                   ),
-                  Positioned(
-                    bottom: 40,
-                    left: 40,
-                    child: Text(
-                      userName,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        shadows: <Shadow>[
-                          Shadow(
-                            offset: Offset(1.0, 1.0),
-                            blurRadius: 3.0,
-                            color: Colors.black,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              )
+                ),
+
+              ],
             ),
           );
         }).toList(),
