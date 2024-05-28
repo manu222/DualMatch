@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:test_app/UserHelper.dart';
 
 import 'Home.dart';
 import 'Matches.dart';
 import 'Usuario.dart';
+
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -42,6 +44,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     user1 = Usuario(
       nombre: 'user1',
       contrasena: '1234',
+      email: '',
+      telefono: 0,
       amigo: null,
       likes: [],
       matches: [],
@@ -50,6 +54,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     user2 = Usuario(
       nombre: 'user2',
       contrasena: '1234',
+      email: '',
+      telefono: 0,
       amigo: null,
       likes: [],
       matches: [],
@@ -58,6 +64,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     user3 = Usuario(
       nombre: 'user3',
       contrasena: '1234',
+      email: '',
+      telefono: 0,
       amigo: null,
       likes: [],
       matches: [],
@@ -66,6 +74,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     user4 = Usuario(
       nombre: 'user4',
       contrasena: '1234',
+      email: '',
+      telefono: 0,
       amigo: null,
       likes: [],
       matches: [],
@@ -226,17 +236,53 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     );
                   } else {
+                    Usuario newUser = Usuario(
+                      nombre: name,
+                      contrasena: password,
+                      email: email,
+                      telefono: int.parse(phone),
+                      amigo: null,
+                      likes: [],
+                      matches: [],
+                      chats: [],
+                    );
+                    if (await UserHelper.existsUser(newUser.email)) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('El usuario ya existe'),
+                        ),
+                      );
+                      return;
+                    }else{
+
+                      await UserHelper.saveUser(newUser);
+
+                      List<Usuario> users = await UserHelper.getUsers();
+                      Usuario? savedUser = await UserHelper.getSpecificUser(email) as Usuario?;
+                      if (savedUser != null) {
+                        print('Usuario recuperado: ${savedUser.nombre}');
+                        print('Email: ${savedUser.email}');
+                        print('Telefono: ${savedUser.telefono}');
+
+                      } else {
+                        print('No se pudo recuperar el usuario');
+                      }
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Usuario registrado con éxito'),
+                        ),
+                      );
+                    }
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => PantallaPrincipal(
-                          user1: user1,
-                          user2: user2,
-                          user3: user3,
-                          user4: user4,
+                          currentUser: newUser,
                         ),
                       ),
-                    ); // Regresar a la pantalla principal
+                    );
+                     // Regresar a la pantalla principal
                   }
                 },
                 style: ElevatedButton.styleFrom(

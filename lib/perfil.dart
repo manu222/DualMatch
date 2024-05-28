@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
 import 'Home.dart';
+import 'edit_profile.dart';
 import 'settings_screen.dart';
 import 'Usuario.dart';
 
 class UserProfileScreen extends StatelessWidget {
-  final Usuario user1;
-  final Usuario user2;
-  final Usuario user3;
-  final Usuario user4;
+  final Usuario? currentUser;
 
   const UserProfileScreen({
     super.key,
-    required this.user1,
-    required this.user2,
-    required this.user3,
-    required this.user4,
+    required this.currentUser,
   });
 
   @override
@@ -30,10 +25,7 @@ class UserProfileScreen extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => PantallaPrincipal(
-                  user1: user1,
-                  user2: user2,
-                  user3: user3,
-                  user4: user4,
+                  currentUser: currentUser,
                 ),
               ),
             );
@@ -43,49 +35,54 @@ class UserProfileScreen extends StatelessWidget {
       body: Container(
         color: Colors.pink[300],
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  const CircleAvatar(
-                    radius: 155,
-                    backgroundColor: Colors.black,
-                  ),
-                  const CircleAvatar(
-                    radius: 153,
-                    backgroundColor: Colors.white,
-                  ),
-                  CircleAvatar(
-                    radius: 150,
-                    backgroundColor: Colors.white,
-                    child: ClipOval(
-                      child: Image.asset(
-                        'assets/U1.jpg',
-                        width: 300,
-                        height: 300,
-                        fit: BoxFit.cover,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 32),
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    const CircleAvatar(
+                      radius: 155,
+                      backgroundColor: Colors.black,
+                    ),
+                    const CircleAvatar(
+                      radius: 153,
+                      backgroundColor: Colors.white,
+                    ),
+                    CircleAvatar(
+                      radius: 150,
+                      backgroundColor: Colors.grey,
+                      child: ClipOval(
+                        child: Image.asset(
+                          'assets/icon.png',
+                          width: 300,
+                          height: 300,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Text(
-                user1.nombre,
-                style: const TextStyle(
-                  fontSize: 24,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Arial',
+                  ],
                 ),
-              ),
-              const SizedBox(height: 32),
-              _buildMenuButton(Icons.settings, 'Ajustes', context),
-              _buildMenuButton(Icons.edit, 'Editar perfil', context),
-              _buildMenuButton(Icons.security, 'Seguridad', context),
-            ],
+                const SizedBox(height: 16),
+                Text(
+                  currentUser!.nombre,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Arial',
+                  ),
+                ),
+                const SizedBox(height: 32),
+                _buildMenuButton(Icons.settings, 'Ajustes', context),
+                _buildMenuButton(Icons.edit, 'Editar perfil', context),
+                _buildMenuButton(Icons.security, 'Seguridad', context),
+                const SizedBox(height: 32),
+              ],
+            ),
           ),
         ),
       ),
@@ -112,11 +109,14 @@ class UserProfileScreen extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => SettingsScreen(
-                      
-                    )));
+                    builder: (context) => SettingsScreen()));
           } else if (text == 'Editar perfil') {
-            // Navigator.push(context,MaterialPageRoute(builder: (context) => EditProfileScreen()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => EditProfileScreen(
+                      currentUser: currentUser,
+                    )));
           } else if (text == 'Seguridad') {
             // Navigator.push(context,MaterialPageRoute(builder: (context) => SecurityScreen()));
           }

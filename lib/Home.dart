@@ -2,19 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:test_app/Usuario.dart';
 import 'package:test_app/perfil.dart';
 
+import 'Matches.dart';
+
 class PantallaPrincipal extends StatefulWidget {
-  final Usuario user1;
-  final Usuario user2;
-  final Usuario user3;
-  final Usuario user4;
+  final Usuario? currentUser;
 
   PantallaPrincipal({
     Key? key,
-    required this.user1,
-    required this.user2,
-    required this.user3,
-    required this.user4,
+    required this.currentUser,
   }) : super(key: key);
+
+
 
   @override
   _PantallaPrincipalState createState() => _PantallaPrincipalState();
@@ -39,6 +37,80 @@ void mostrarIconoFlotante(BuildContext context, IconData icono) {
 
 class _PantallaPrincipalState extends State<PantallaPrincipal> {
   int indiceActual = 0;
+
+  late Usuario user1;
+  late Usuario user2;
+  late Usuario user3;
+  late Usuario user4;
+
+  @override
+  void initState() {
+    super.initState();
+    user1 = Usuario(
+      nombre: 'Sandra',
+      contrasena: '1234',
+      email: '',
+      telefono: 1234567890,
+      amigo: null,
+      likes: [],
+      matches: [],
+      chats: [],
+    );
+    user2 = Usuario(
+      nombre: 'Maria',
+      contrasena: '1234',
+      email: '',
+      telefono: 1234567890,
+      amigo: null,
+      likes: [],
+      matches: [],
+      chats: [],
+    );
+    user3 = Usuario(
+      nombre: 'Carlos',
+      contrasena: '1234',
+      email: '',
+      telefono: 1234567890,
+      amigo: null,
+      likes: [],
+      matches: [],
+      chats: [],
+    );
+    user4 = Usuario(
+      nombre: 'Pedro',
+      contrasena: '1234',
+      email: 'pedro@mail.com',
+      telefono: 1234567890,
+      amigo: null,
+      likes: [],
+      matches: [],
+      chats: [],
+    );
+
+    user1.setAmigo(user2);
+    user2.setAmigo(user1);
+    user3.setAmigo(user4);
+    user4.setAmigo(user3);
+
+    user1.setLikes([user3]);
+    user2.setLikes([user4]);
+    user3.setLikes([user1]);
+    user4.setLikes([user2]);
+
+    List<Matches> matches1 = [Matches(usuarios: [user3, user4])];
+    List<Matches> matches2 = [Matches(usuarios: [user1, user2])];
+
+    user1.setMatches(matches1);
+    user2.setMatches(matches1);
+    user3.setMatches(matches2);
+    user4.setMatches(matches2);
+
+    user1.setChats([user2.nombre, user3.nombre, user4.nombre]);
+    user2.setChats([user1.nombre, user3.nombre, user4.nombre]);
+    user3.setChats([user1.nombre, user2.nombre, user4.nombre]);
+    user4.setChats([user1.nombre, user2.nombre, user3.nombre]);
+
+  }
 
   final List<String> images = [
     'assets/U1.jpg',
@@ -116,16 +188,16 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
           String userName;
           switch (index) {
             case 0:
-              userName = widget.user1.nombre;
+              userName = user1.nombre;
               break;
             case 1:
-              userName = widget.user2.nombre;
+              userName = user2.nombre;
               break;
             case 2:
-              userName = widget.user3.nombre;
+              userName = user3.nombre;
               break;
             case 3:
-              userName = widget.user4.nombre;
+              userName = user4.nombre;
               break;
             default:
               userName = 'Usuario desconocido';
@@ -292,10 +364,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
               context,
               MaterialPageRoute(
                 builder: (context) => UserProfileScreen(
-                  user1: widget.user1,
-                  user2: widget.user2,
-                  user3: widget.user3,
-                  user4: widget.user4,
+                  currentUser: widget.currentUser,
                 ),
               ),
             );
