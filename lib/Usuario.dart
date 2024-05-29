@@ -31,6 +31,18 @@ class Usuario {
     required this.likes,
     required this.matches,
     required this.chats,
+    this.bio,
+    this.intereses,
+    this.genero,
+    this.edadInicial,
+    this.edadFinal,
+    this.distanciaInicial,
+    this.distanciaFinal,
+    this.notificaciones,
+    this.privacidad,
+    this.region,
+    this.idioma,
+    this.imagenesInteligentes,
   });
 
 //haz getters y setters
@@ -238,6 +250,19 @@ class Usuario {
       'likes': likes.map((like) => like.toJson()).toList(),
       'matches': matches.map((match) => match.toJson()).toList(),
       'chats': chats,
+      'bio': bio,
+      'intereses': intereses,
+      'genero': genero,
+      'edadInicial': edadInicial,
+      'edadFinal': edadFinal,
+      'distanciaInicial': distanciaInicial,
+      'distanciaFinal': distanciaFinal,
+      'notificaciones': notificaciones,
+      'privacidad': privacidad,
+      'region': region,
+      'idioma': idioma,
+      'imagenesInteligentes': imagenesInteligentes,
+
     };
   }
 
@@ -251,6 +276,18 @@ class Usuario {
       likes: (json['likes'] as List).map((likeJson) => Usuario.fromJson(likeJson)).toList(),
       matches: (json['matches'] as List).map((matchJson) => Matches.fromJson(matchJson)).toList(),
       chats: List<String>.from(json['chats']),
+      bio: json['bio'],
+      intereses: json['intereses'],
+      genero: json['genero'],
+      edadInicial: json['edadInicial'],
+      edadFinal: json['edadFinal'],
+      distanciaInicial: json['distanciaInicial'],
+      distanciaFinal: json['distanciaFinal'],
+      notificaciones: json['notificaciones'],
+      privacidad: json['privacidad'],
+      region: json['region'],
+      idioma: json['idioma'],
+      imagenesInteligentes: json['imagenesInteligentes'],
     );
   }
 

@@ -263,7 +263,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         print('Usuario recuperado: ${savedUser.nombre}');
                         print('Email: ${savedUser.email}');
                         print('Telefono: ${savedUser.telefono}');
-
                       } else {
                         print('No se pudo recuperar el usuario');
                       }
