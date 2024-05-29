@@ -9,7 +9,9 @@ import 'Usuario.dart';
 
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+  final Usuario? user;
+  List<Usuario>? users = [];
+  RegisterScreen({super.key, this.users, this.user});
 
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
@@ -20,7 +22,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String? phoneNumber;
   PhoneNumber? number;
   String? initialCountry = 'ES';
-
+  List<Usuario>? users = [];
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -258,13 +260,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       await UserHelper.saveUser(newUser);
 
                       List<Usuario> users = await UserHelper.getUsers();
-                      Usuario? savedUser = await UserHelper.getSpecificUser(email) as Usuario?;
+                      Usuario? savedUser = await UserHelper.getSpecificUser(email);
                       if (savedUser != null) {
                         print('Usuario recuperado: ${savedUser.nombre}');
                         print('Email: ${savedUser.email}');
                         print('Telefono: ${savedUser.telefono}');
                       } else {
                         print('No se pudo recuperar el usuario');
+                      }
+
+                      //guardar usuarios en la lista si no existen en ella
+                      if(!users.contains(user1)){
+                        users.add(user1);
+                      }else if(!users.contains(user2)){
+                        users.add(user2);
+                      }else if(!users.contains(user3)){
+                        users.add(user3);
+                      }else if(!users.contains(user4)){
+                        users.add(user4);
+                      }else if(!users.contains(newUser)){
+                        users.add(newUser);
                       }
 
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -277,7 +292,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => PantallaPrincipal(
-                          currentUser: newUser,
+                          currentUser: newUser
                         ),
                       ),
                     );

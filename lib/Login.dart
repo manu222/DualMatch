@@ -4,7 +4,9 @@ import 'Home.dart';
 import 'Usuario.dart';
 
 class Login extends StatefulWidget {
-  const Login({super.key});
+  final Usuario? user;
+
+   Login({super.key, this.user});
 
   @override
   _LoginState createState() => _LoginState();
@@ -13,6 +15,7 @@ class Login extends StatefulWidget {
 
 
 class _LoginState extends State<Login> {
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String? _EmailError = '';
@@ -70,6 +73,7 @@ class _LoginState extends State<Login> {
                 onPressed: () async {
                   final email = _emailController.text;
                   final password = _passwordController.text;
+                  Usuario? currentUser;
                   if (email.isEmpty || password.isEmpty) {
                     setState(() {
                       _EmailError = email.isEmpty ? 'Por favor, llena este campo' : '';
@@ -80,33 +84,28 @@ class _LoginState extends State<Login> {
                         content: Text('Por favor, llena todos los campos'),
                       ),
                     );
-                  } else {
-                    if (await isAuthenticated(email, password)){
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Inicio de sesión exitoso'),
-                        ),
-                      );
-                      Usuario? currentUser = await UserHelper.getSpecificUser(email);
+                  } else if(await UserHelper.existsUser(email)){
+                    if (await isAuthenticated(email, password)) {
+                      currentUser = await UserHelper.getUserByMailAndPassword(email, password);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => PantallaPrincipal(
-                            currentUser: currentUser,
-                          ),
+                          builder: (context) => PantallaPrincipal(currentUser: currentUser),
                         ),
                       );
                     } else {
-                      setState(() {
-                        _EmailError = 'Nombre o contraseña incorrectos';
-                        _passwordError = 'Nombre o contraseña incorrectos';
-                      });
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('Nombre o contraseña incorrectos'),
+                          content: Text('Email o contraseña incorrectos'),
                         ),
                       );
                     }
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('El usuario no existe'),
+                      ),
+                    );
                   }
                 },
                 style: ElevatedButton.styleFrom(

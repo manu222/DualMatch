@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
-class SettingsScreen extends StatefulWidget {
 
-  const SettingsScreen({Key? key}) : super(key: key);
+import 'Usuario.dart';
+
+class SettingsScreen extends StatefulWidget {
+  final Usuario? user;
+  const SettingsScreen({Key? key,this.user}) : super(key: key);
 
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
@@ -10,6 +13,8 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _switchValue = false;
+
+
 
   List<String> comunidadesAutonomas = [
     'Andalucía', 'Aragón', 'Asturias', 'Baleares', 'Canarias', 'Cantabria',
@@ -59,6 +64,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
               const Divider(color: Colors.white, thickness: 1,),
               _buildDropdown('Idioma', ['Español', 'Inglés', 'Francés','Portugués'],Icons.language),
               const Divider(color: Colors.white, thickness: 1,),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+
+                  print('Cambios guardados');
+                },
+                child: const Text('Guardar cambios'),
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white, backgroundColor: Colors.pink, // Cambia el color del texto aquí
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    side: const BorderSide(color: Colors.black, width: 1.3),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

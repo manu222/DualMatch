@@ -1,28 +1,39 @@
 import 'package:flutter/material.dart';
+import 'Usuario.dart';
 import 'register.dart';
 import 'login.dart';
 
 
-void main() => runApp(const MyApp());
+void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  final user;
+  List<Usuario>? users = [];
+   MyApp({super.key, this.users, this.user});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const VistaInicial(),
+      home:  VistaInicial(),
       routes: {
-        '/register': (context) => const RegisterScreen(),
-        '/Login': (context) => const Login(),
-        '/main': (context) => const VistaInicial(),
+        '/register': (context) =>  RegisterScreen(),
+        '/Login': (context) =>   Login(),
+        '/main': (context) =>   VistaInicial(),
       },
     );
   }
 }
 
 class VistaInicial extends StatelessWidget {
-  const VistaInicial({super.key});
+
+  final user;
+  List<Usuario>? users = [];
+   VistaInicial({super.key, this.user, this.users});
 
   @override
   Widget build(BuildContext context) {
@@ -60,9 +71,14 @@ class VistaInicial extends StatelessWidget {
                 SizedBox(
                   width: 200, // Ancho fijo para los botones
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       // Acción de iniciar sesión
-                      Navigator.pushNamed(context, '/Login');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Login(),
+                        ),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       elevation: 15, // Elevación del botón
@@ -85,7 +101,12 @@ class VistaInicial extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       // Navegar a la pantalla de registro
-                      Navigator.pushNamed(context, '/register');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RegisterScreen(user: user, users: users,),
+                        ),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       elevation: 15, // Elevación del botón

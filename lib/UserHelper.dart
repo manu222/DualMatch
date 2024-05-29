@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:path_provider/path_provider.dart';
 import 'Usuario.dart'; // Asegúrate de importar tu clase User
 
@@ -29,7 +30,15 @@ class UserHelper {
     try {
       final file = await _getFile();
       List<Usuario> users = await getUsers();
-      users.add(user);
+      // Verifica si el usuario ya existe en la lista
+      int index = users.indexWhere((u) => u.email == user.email);
+      if (index != -1) {
+        // Si el usuario ya existe, actualiza sus datos
+        users[index] = user;
+      } else {
+        // Si el usuario no existe, añádelo a la lista
+        users.add(user);
+      }
       final jsonString = jsonEncode(users.map((user) => user.toJson()).toList());
       await file.writeAsString(jsonString);
       return true;
@@ -52,15 +61,64 @@ class UserHelper {
     }
   }
 
+  static Future<List<Usuario>> getUsers2() async {
+    try {
+      final jsonString = await rootBundle.loadString('assets/users.json');
+      final List<dynamic> userMaps = jsonDecode(jsonString);
+      return userMaps.map((userMap) => Usuario.fromJson(userMap)).toList();
+    } catch (e) {
+      return [];
+    }
+  }
+
+ static void openJsonFile() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/users.json');
+    if (await file.exists()) {
+      String content = await file.readAsString();
+      List<dynamic> jsonContent = jsonDecode(content);
+      print(jsonContent);
+    } else {
+      print('El archivo no existe');
+    }
+  }
+
+  static void saveSpecificUser(Usuario user) async {
+    List<Usuario> users = await UserHelper.getUsers();
+    users.removeWhere((element) => element.email == user.email);
+    users.add(user);
+    UserHelper.saveAllUsers(users);
+  }
+
+  static void printAllUsers() async {
+    List<Usuario> users = await UserHelper.getUsers();
+    users.forEach((user) {
+      print(user.toString());
+    });
+  }
+
+
+
   static Future<Usuario?> getSpecificUser(String email) async {
     List<Usuario> users = await UserHelper.getUsers();
 
     Usuario? specificUser = users.firstWhere(
           (usuario) => usuario.email == email ,
-      orElse: () => Usuario(nombre: "nombre", contrasena: "contrasena", telefono: 0, email: email, likes: [], matches: [], chats: []),
+      orElse: () => Usuario(nombre: "", contrasena: "", telefono: 0, email: "", likes: [], matches: [], chats: []),
     );
 
     return specificUser;
+  }
+
+  static Future<bool> saveAllUsers(List<Usuario> users) async {
+    try {
+      final file = await _getFile();
+      final jsonString = jsonEncode(users.map((user) => user.toJson()).toList());
+      await file.writeAsString(jsonString);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
 

@@ -3,14 +3,14 @@ import 'Matches.dart';
 class Usuario {
   String nombre;
   String contrasena;
-  Usuario? amigo ;
+  Usuario? amigo;
   String email;
   int telefono;
   List<Usuario> likes;
   List<Matches> matches;
   List<String> chats;
   String? bio;
-  String? intereses;
+  List<String>? intereses;
   String? genero;
   int? edadInicial;
   int? edadFinal;
@@ -150,11 +150,11 @@ class Usuario {
     return bio;
   }
 
-  void setIntereses(String intereses) {
+  void setIntereses(List<String> intereses) {
     this.intereses = intereses;
   }
 
-  String? getIntereses() {
+  List<String>? getIntereses() {
     return intereses;
   }
 
@@ -233,11 +233,11 @@ class Usuario {
   void setImagenesInteligentes(bool imagenesInteligentes) {
     this.imagenesInteligentes = imagenesInteligentes;
   }
-  
+
   bool? getImagenesInteligentes() {
     return imagenesInteligentes;
   }
-  
+
 
   // Métodos para convertir a JSON y desde JSON
   Map<String, dynamic> toJson() {
@@ -273,8 +273,10 @@ class Usuario {
       telefono: json['telefono'],
       email: json['email'],
       amigo: json['amigo'] != null ? Usuario.fromJson(json['amigo']) : null,
-      likes: (json['likes'] as List).map((likeJson) => Usuario.fromJson(likeJson)).toList(),
-      matches: (json['matches'] as List).map((matchJson) => Matches.fromJson(matchJson)).toList(),
+      likes: (json['likes'] as List).map((likeJson) =>
+          Usuario.fromJson(likeJson)).toList(),
+      matches: (json['matches'] as List).map((matchJson) =>
+          Matches.fromJson(matchJson)).toList(),
       chats: List<String>.from(json['chats']),
       bio: json['bio'],
       intereses: json['intereses'],
@@ -291,7 +293,17 @@ class Usuario {
     );
   }
 
+  String? getAmigoNombre(){
+    if(amigo == null){
+      return "No tiene amigo";
+    }
+    return amigo?.nombre;
+  }
 
-
-
+  String toString(){
+    return "Nombre: $nombre, Email: $email, Telefono: $telefono \n "
+        "bio: $bio intereses: $intereses genero: $genero edadInicial: $edadInicial \n "
+        "edadFinal: $edadFinal distanciaInicial: $distanciaInicial distanciaFinal: $distanciaFinal notificaciones: $notificaciones \n"
+        " privacidad: $privacidad region: $region idioma: $idioma imagenesInteligentes: $imagenesInteligentes Amigo: ${getAmigoNombre()}";
+  }
 }

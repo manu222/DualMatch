@@ -7,10 +7,10 @@ import 'Matches.dart';
 class PantallaPrincipal extends StatefulWidget {
   final Usuario? currentUser;
 
-  PantallaPrincipal({
-    Key? key,
+   PantallaPrincipal({
+    super.key,
     required this.currentUser,
-  }) : super(key: key);
+  });
 
 
 
@@ -50,6 +50,18 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
       nombre: 'Sandra',
       contrasena: '1234',
       email: '',
+      bio: 'Hola, soy Sandra, me gusta el cine y la música',
+      intereses: ['Cine', 'Música'],
+      genero: 'Femenino',
+      edadInicial: 18,
+      edadFinal: 30,
+      distanciaInicial: 0,
+      distanciaFinal: 10,
+      notificaciones: true,
+      privacidad: 'Público',
+      region: 'España',
+      idioma: 'Español',
+      imagenesInteligentes: true,
       telefono: 1234567890,
       amigo: null,
       likes: [],
@@ -60,6 +72,18 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
       nombre: 'Maria',
       contrasena: '1234',
       email: '',
+      bio: 'Hola, soy Maria, me gusta el deporte y la lectura',
+      intereses: ['Deporte', 'Lectura'],
+      genero: 'Femenino',
+      edadInicial: 18,
+      edadFinal: 30,
+      distanciaInicial: 0,
+      distanciaFinal: 10,
+      notificaciones: true,
+      privacidad: 'Público',
+      region: 'España',
+      idioma: 'Español',
+      imagenesInteligentes: true,
       telefono: 1234567890,
       amigo: null,
       likes: [],
@@ -70,6 +94,18 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
       nombre: 'Carlos',
       contrasena: '1234',
       email: '',
+      bio: 'Hola, soy Carlos, me gusta la música y el cine',
+      intereses: ['Música', 'Cine'],
+      genero: 'Masculino',
+      edadInicial: 18,
+      edadFinal: 30,
+      distanciaInicial: 0,
+      distanciaFinal: 10,
+      notificaciones: true,
+      privacidad: 'Público',
+      region: 'España',
+      idioma: 'Español',
+      imagenesInteligentes: true,
       telefono: 1234567890,
       amigo: null,
       likes: [],
@@ -80,6 +116,18 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
       nombre: 'Pedro',
       contrasena: '1234',
       email: 'pedro@mail.com',
+      bio: 'Hola, soy Pedro, me gusta el deporte y la lectura',
+      intereses: ['Deporte', 'Lectura'],
+      genero: 'Masculino',
+      edadInicial: 18,
+      edadFinal: 30,
+      distanciaInicial: 0,
+      distanciaFinal: 10,
+      notificaciones: true,
+      privacidad: 'Público',
+      region: 'España',
+      idioma: 'Español',
+      imagenesInteligentes: true,
       telefono: 1234567890,
       amigo: null,
       likes: [],
@@ -110,7 +158,13 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
     user3.setChats([user1.nombre, user2.nombre, user4.nombre]);
     user4.setChats([user1.nombre, user2.nombre, user3.nombre]);
 
+    widget.currentUser!.setMatches(matches2);
+    widget.currentUser!.setChats([user1.nombre, user2.nombre, user3.nombre, user4.nombre]);
+    widget.currentUser!.setAmigo(user3);
+
   }
+
+
 
   final List<String> images = [
     'assets/U1.jpg',
@@ -328,7 +382,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
           IconButton(
             icon: const Icon(Icons.logout, color: Colors.white),
             onPressed: () {
-              Navigator.pushNamed(context, '/main');
+              Navigator.pushNamed(context, '/main', arguments: widget.currentUser);
             },
           ),
         ],

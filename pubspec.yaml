@@ -18,6 +18,8 @@ dependencies:
   intl_phone_number_input: ^0.7.4
   shared_preferences: ^2.0.8
   image_picker: ^0.8.4+4
+  multi_select_flutter: ^4.1.1
+  sqflite: ^2.0.0+4
 
 dev_dependencies:
   flutter_test:
@@ -30,3 +32,4 @@ flutter:
     - assets/image.png
     - assets/image2.png
     - assets/
+    - assets/users.json
