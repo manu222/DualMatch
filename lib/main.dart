@@ -8,8 +8,9 @@ void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
   final user;
-  List<Usuario>? users = [];
-   MyApp({super.key, this.users, this.user});
+  List<Usuario>? usuarios;
+
+   MyApp({super.key, this.user, this.usuarios});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -32,8 +33,8 @@ class _MyAppState extends State<MyApp> {
 class VistaInicial extends StatelessWidget {
 
   final user;
-  List<Usuario>? users = [];
-   VistaInicial({super.key, this.user, this.users});
+
+   VistaInicial({super.key, this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +77,7 @@ class VistaInicial extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => Login(),
+                          builder: (context) => Login(user: user, ),
                         ),
                       );
                     },
@@ -104,7 +105,7 @@ class VistaInicial extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => RegisterScreen(user: user, users: users,),
+                          builder: (context) => RegisterScreen(user: user),
                         ),
                       );
                     },

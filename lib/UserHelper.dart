@@ -11,20 +11,21 @@ class UserHelper {
     return File('${directory.path}/users.json');
   }
 
-  static Future<bool> existsUser(String email) async{
+  static Future<bool> existsUser(String email) async {
     List<Usuario> users = await getUsers();
     return users.any((user) => user.email == email);
   }
 
   static Future<Usuario?> getUserByMailAndPassword(String email, String password) async {
     List<Usuario> users = await getUsers();
-    Usuario? user = users.firstWhere(
-          (user) => user.email == email && user.contrasena == password,
-      orElse: () => Usuario(nombre: "", contrasena: "", telefono: 0, email: email, likes: [], matches: [], chats: []),
-    );
-    return user;
+    try {
+      return users.firstWhere(
+            (user) => user.email == email && user.contrasena == password,
+      );
+    } catch (e) {
+      return null; // Retorna null si no encuentra un usuario
+    }
   }
-
 
   static Future<bool> saveUser(Usuario user) async {
     try {
@@ -61,7 +62,7 @@ class UserHelper {
     }
   }
 
-  static Future<List<Usuario>> getUsers2() async {
+  static Future<List<Usuario>> getUsersFromAssets() async {
     try {
       final jsonString = await rootBundle.loadString('assets/users.json');
       final List<dynamic> userMaps = jsonDecode(jsonString);
@@ -71,7 +72,7 @@ class UserHelper {
     }
   }
 
- static void openJsonFile() async {
+  static void openJsonFile() async {
     final directory = await getApplicationDocumentsDirectory();
     final file = File('${directory.path}/users.json');
     if (await file.exists()) {
@@ -97,17 +98,14 @@ class UserHelper {
     });
   }
 
-
-
   static Future<Usuario?> getSpecificUser(String email) async {
     List<Usuario> users = await UserHelper.getUsers();
 
-    Usuario? specificUser = users.firstWhere(
-          (usuario) => usuario.email == email ,
-      orElse: () => Usuario(nombre: "", contrasena: "", telefono: 0, email: "", likes: [], matches: [], chats: []),
-    );
-
-    return specificUser;
+    try {
+      return users.firstWhere((usuario) => usuario.email == email);
+    } catch (e) {
+      return null; // Retorna null si no encuentra un usuario
+    }
   }
 
   static Future<bool> saveAllUsers(List<Usuario> users) async {
@@ -120,6 +118,4 @@ class UserHelper {
       return false;
     }
   }
-
-
 }

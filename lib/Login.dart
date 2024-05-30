@@ -5,20 +5,19 @@ import 'Usuario.dart';
 
 class Login extends StatefulWidget {
   final Usuario? user;
+  List<Usuario>? usuarios;
 
-   Login({super.key, this.user});
+  Login({super.key, this.user, this.usuarios});
 
   @override
   _LoginState createState() => _LoginState();
 }
 
-
-
 class _LoginState extends State<Login> {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  String? _EmailError = '';
+  String? _emailError = '';
   String? _passwordError = '';
 
   Future<bool> isAuthenticated(String email, String password) async {
@@ -47,7 +46,7 @@ class _LoginState extends State<Login> {
                 fillColor: Colors.grey[200],
                 labelText: 'Email',
                 labelStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15),
-                errorText: _EmailError == '' ? null : _EmailError,
+                errorText: _emailError == '' ? null : _emailError,
                 hintText: 'Introduce tu email',
                 hintStyle: TextStyle(color: Colors.grey[600]),
               ),
@@ -73,10 +72,9 @@ class _LoginState extends State<Login> {
                 onPressed: () async {
                   final email = _emailController.text;
                   final password = _passwordController.text;
-                  Usuario? currentUser;
                   if (email.isEmpty || password.isEmpty) {
                     setState(() {
-                      _EmailError = email.isEmpty ? 'Por favor, llena este campo' : '';
+                      _emailError = email.isEmpty ? 'Por favor, llena este campo' : '';
                       _passwordError = password.isEmpty ? 'Por favor, llena este campo' : '';
                     });
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -84,28 +82,36 @@ class _LoginState extends State<Login> {
                         content: Text('Por favor, llena todos los campos'),
                       ),
                     );
-                  } else if(await UserHelper.existsUser(email)){
-                    if (await isAuthenticated(email, password)) {
-                      currentUser = await UserHelper.getUserByMailAndPassword(email, password);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PantallaPrincipal(currentUser: currentUser),
-                        ),
-                      );
+                  } else {
+                    if (await UserHelper.existsUser(email)) {
+                      if (await isAuthenticated(email, password)) {
+                        Usuario? currentUser = await UserHelper.getUserByMailAndPassword(email, password);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PantallaPrincipal(currentUser: currentUser, usuarios: widget.usuarios),
+                          ),
+                        );
+                      } else {
+                        setState(() {
+                          _passwordError = 'Contraseña incorrecta';
+                        });
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Email o contraseña incorrectos'),
+                          ),
+                        );
+                      }
                     } else {
+                      setState(() {
+                        _emailError = 'El usuario no existe';
+                      });
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('Email o contraseña incorrectos'),
+                          content: Text('El usuario no existe'),
                         ),
                       );
                     }
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('El usuario no existe'),
-                      ),
-                    );
                   }
                 },
                 style: ElevatedButton.styleFrom(

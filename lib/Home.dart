@@ -1,31 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:test_app/Usuario.dart';
 import 'package:test_app/perfil.dart';
-
 import 'Matches.dart';
 
 class PantallaPrincipal extends StatefulWidget {
   final Usuario? currentUser;
-
-   PantallaPrincipal({
+  List<Usuario>? usuarios;
+  PantallaPrincipal({
     super.key,
     required this.currentUser,
+    this.usuarios,
   });
-
-
 
   @override
   _PantallaPrincipalState createState() => _PantallaPrincipalState();
 }
 
-void mostrarIconoFlotante(BuildContext context, IconData icono) {
+void mostrarIconoFlotante(BuildContext context, IconData icono, String mensaje) {
   OverlayState overlayState = Overlay.of(context);
   OverlayEntry overlayEntry = OverlayEntry(
     builder: (context) => Center(
-      child: Icon(
-        icono,
-        color: Colors.red,
-        size: 100.0,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            icono,
+            color: Colors.red,
+            size: 100.0,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            mensaje,
+            style: TextStyle(color: Colors.red, fontSize: 24),
+          ),
+        ],
       ),
     ),
   );
@@ -161,10 +169,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
     widget.currentUser!.setMatches(matches2);
     widget.currentUser!.setChats([user1.nombre, user2.nombre, user3.nombre, user4.nombre]);
     widget.currentUser!.setAmigo(user3);
-
   }
-
-
 
   final List<String> images = [
     'assets/U1.jpg',
@@ -264,13 +269,16 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
                   key: UniqueKey(),
                   direction: DismissDirection.horizontal,
                   onDismissed: (direction) {
+                    String mensaje='';
                     IconData icono = Icons.error;
                     if (direction == DismissDirection.endToStart) {
                       icono = Icons.close;
+                      mensaje = 'Rechazado';
                     } else if (direction == DismissDirection.startToEnd) {
                       icono = Icons.favorite;
+                      mensaje = 'Me gusta';
                     }
-                    mostrarIconoFlotante(context, icono);
+                    mostrarIconoFlotante(context, icono, mensaje);
                     setState(() {
                       images.remove(image);
                     });
@@ -315,7 +323,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
                     onTap: () {
                       setState(() {
                         images.removeAt(index);
-                        mostrarIconoFlotante(context, Icons.close);
+                        mostrarIconoFlotante(context, Icons.close, 'Rechazado');
                       });
                     },
                     child: Container(
@@ -340,7 +348,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
                     onTap: () {
                       setState(() {
                         images.removeAt(index);
-                        mostrarIconoFlotante(context, Icons.favorite);
+                        mostrarIconoFlotante(context, Icons.favorite, 'Me gusta');
                       });
                     },
                     child: Container(
@@ -357,7 +365,6 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
                     ),
                   ),
                 ),
-
               ],
             ),
           );
@@ -397,11 +404,11 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
         backgroundColor: Colors.pink[100],
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.density_small),
+            icon: Icon(Icons.people),
             label: 'Personas',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble),
+            icon: Icon(Icons.chat),
             label: 'Matches',
           ),
           BottomNavigationBarItem(

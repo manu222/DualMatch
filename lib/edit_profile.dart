@@ -7,10 +7,10 @@ import 'Usuario.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final Usuario? currentUser;
-  List<Usuario>? users = [];
+
 
    EditProfileScreen({
-    Key? key, this.currentUser, this.users
+    Key? key, this.currentUser
   }) : super(key: key);
 
   @override
@@ -249,15 +249,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               style: TextStyle(color: Colors.black),
             ),
             const SizedBox(height: 32.0),
-             TextField(
-              controller: _bioController, // Asignar _bioController a este campo de texto
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Descripción',
+            TextField(
+              controller: _bioController,
+              decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
-                labelStyle: TextStyle(color: Colors.black),
+                labelText: 'Descripción',
+                labelStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                errorText: _bioController.text.isEmpty ? 'Por favor, llena este campo' : null,
               ),
+              maxLines: 3,
             ),
             const SizedBox(height: 16.0),
             MultiSelectDialogField(
@@ -295,31 +296,40 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ),
             const SizedBox(height: 16.0),
             Text('Tus intereses: ${_selectedInterests.join(', ')}',
-                style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16.0)),
+                style: const TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16.0)),
             const SizedBox(height: 16.0),
             TextField(
-              controller: _duoController, // Asignar _duoController a este campo de texto
+              controller: _duoController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: _isError ? Colors.red : Colors.grey, // Cambia el color del borde según _isError
+                    color: _isError ? Colors.red : Colors.grey,
                   ),
                 ),
                 labelText: 'DUO (correo de tu amigo)',
                 filled: true,
                 fillColor: Colors.white,
-                labelStyle: TextStyle(color: Colors.black),
+                labelStyle: const TextStyle(color: Colors.black),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.clear),
+                  onPressed: () {
+                    setState(() {
+                      _duoController.clear();
+                      widget.currentUser!.amigo = null;
+                    });
+                  },
+                ),
               ),
             ),
             const SizedBox(height: 16.0),
-            Text(
+            const Text(
               'Si tienes un amigo que también usa la app, puedes agregar su correo aquí para que puedan ser DUO.',
               style: TextStyle(color: Colors.black),
             ),
-            Text('Si no tienes un amigo, puedes dejar este campo vacío.',
+            const Text('Si no tienes un amigo, puedes dejar este campo vacío.',
                 style: TextStyle(color: Colors.black)),
             Text('DUO actual: ${widget.currentUser!.amigo?.email ?? 'No tienes DUO'}',
-                style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16.0)
+                style: const TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16.0)
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
