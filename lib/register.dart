@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import 'package:test_app/UserHelper.dart';
+import 'package:provider/provider.dart';
+import 'package:test_app/UserProvider.dart';
 
 import 'Home.dart';
-import 'Matches.dart';
 import 'Usuario.dart';
+import 'main.dart';
 
 class RegisterScreen extends StatefulWidget {
-  final Usuario? user;
-  List<Usuario>? usuarios;
 
-  RegisterScreen({super.key,this.user, this.usuarios});
+
+  const RegisterScreen({super.key});
 
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
+}
+
+bool userExists(List<Usuario> usuarios, String email) {
+  if (usuarios.isEmpty) {
+    return usuarios.any((user) => user.email == email);
+  }
+  return false;
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
@@ -46,11 +53,44 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    List<Usuario>? usuarios = Provider.of<UserManager>(context).usuarios;
+    Usuario? user = Provider.of<UserManager>(context).currentUser;
+
+
+    if (user == null) {
+      print('No hay usuario en register.dart');
+    } else {
+      print('Usuario: ${user.nombre}'+  ' estamos en register.dart');
+    }
+
+    if (usuarios.isEmpty) {
+      print('No hay usuarios en register.dart');
+    } else {
+      print('Usuarios: ${usuarios.length}');
+      for (var user in usuarios) {
+        print('Usuario: ${user.nombre}'+  ' estamos en register.dart');
+      }
+    }
+
+
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
         title: const Text('Registro'),
         backgroundColor: Colors.pink,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => VistaInicial(),
+              ),
+            );
+          },
+        ),
       ),
       backgroundColor: Colors.pink[100],
       body: SingleChildScrollView(
@@ -122,12 +162,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               ignoreBlank: false,
               autoValidateMode: AutovalidateMode.disabled,
-              selectorTextStyle: TextStyle(color: Colors.black),
+              selectorTextStyle: const TextStyle(color: Colors.black),
               initialValue: PhoneNumber(isoCode: 'ES'),
               textFieldController: _phoneController,
               formatInput: false,
-              keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
-              inputBorder: OutlineInputBorder(),
+              keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
+              inputBorder: const OutlineInputBorder(),
               onSaved: (PhoneNumber number) {
                 print('On Saved: $number');
               },
@@ -195,7 +235,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         content: Text('Las contraseñas no coinciden'),
                       ),
                     );
-                  } else if (await UserHelper.existsUser(email)) {
+                  } else if (userExists(usuarios, email)){
                     setState(() {
                       _emailError = 'El email ya está registrado';
                     });
@@ -227,15 +267,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       matches: [],
                       chats: [],
                     );
+
+                    Provider.of<UserManager>(context, listen: false).addUser(newUser);
+                    Provider.of<UserManager>(context, listen: false).setCurrentUser(newUser);
+
+                    /*
                     List<Usuario> updatedUsers = List.from(widget.usuarios ?? [])..add(newUser);
                     //print lista
                     updatedUsers.forEach((element) {
                       print(element.toString());
                     });
+
+                     */
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PantallaPrincipal(currentUser: newUser, usuarios: updatedUsers),
+                        builder: (context) => PantallaPrincipal(),
                       ),
                     );
                   }

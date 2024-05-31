@@ -1,6 +1,7 @@
 import 'Usuario.dart';
 
 class Matches {
+
   List<Usuario> usuarios;
 
   Matches({required this.usuarios});

@@ -1,21 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'Home.dart';
+import 'UserProvider.dart';
 import 'edit_profile.dart';
 import 'settings_screen.dart';
 import 'Usuario.dart';
 
 class UserProfileScreen extends StatelessWidget {
-  final Usuario? currentUser;
 
-  const UserProfileScreen({
+
+   UserProfileScreen({
     super.key,
-    required this.currentUser,
   });
-
   @override
   Widget build(BuildContext context) {
+
+    List<Usuario>? usuarios = Provider.of<UserManager>(context).usuarios;
+    Usuario? currentUser = Provider.of<UserManager>(context).currentUser;
+
+    if (currentUser == null) {
+      print('No hay usuario estamos en perfil.dart');
+    } else {
+      print('Usuario: ${currentUser.nombre}' + ' estamos en perfil.dart');
+    }
+
+    for (Usuario user in usuarios) {
+      print('Usuario: ${user.nombre}' + ' estamos en perfil.dart');
+    }
+
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: true,
         backgroundColor: Colors.pink,
         title: const Text('Perfil'),
         leading: IconButton(
@@ -24,9 +39,7 @@ class UserProfileScreen extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => PantallaPrincipal(
-                  currentUser: currentUser,
-                ),
+                builder: (context) => PantallaPrincipal(),
               ),
             );
           },
@@ -115,8 +128,9 @@ class UserProfileScreen extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (context) => EditProfileScreen(
-                      currentUser: currentUser,
-                    )));
+                    )
+                )
+            );
           } else if (text == 'Seguridad') {
             // Navigator.push(context,MaterialPageRoute(builder: (context) => SecurityScreen()));
           }
