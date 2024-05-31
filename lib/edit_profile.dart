@@ -120,10 +120,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                 ),
                 Switch(
-                  value: _smartPhotosEnabled,
+                  value: currentUser?.imagenesInteligentes ?? _smartPhotosEnabled,
                   onChanged: (bool value) {
                     setState(() {
                       _smartPhotosEnabled = value;
+                      currentUser?.imagenesInteligentes = value;
                     });
                   },
                   activeColor: Colors.green,
@@ -137,15 +138,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             const SizedBox(height: 32.0),
             TextField(
               controller: _bioController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
                 labelText: 'Descripción',
-                labelStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-                errorText: _bioController.text.isEmpty ? 'Por favor, llena este campo' : null,
+                labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               ),
               maxLines: 3,
             ),
+
             const SizedBox(height: 16.0),
             MultiSelectDialogField(
               items: _interests
@@ -174,17 +175,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   fontSize: 16,
                 ),
               ),
-              initialValue: _selectedInterests,
+              initialValue: currentUser?.intereses ?? [],
               onConfirm: (results) {
                 setState(() {
                   _selectedInterests = results.cast<String>();
                 });
               },
-            ),
-            const SizedBox(height: 16.0),
-            Text(
-              'Tus intereses: ${_selectedInterests.join(', ')}',
-              style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16.0),
             ),
             const SizedBox(height: 16.0),
             TextField(
@@ -226,26 +222,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () async {
+                // Obtiene el texto de la descripción y el DUO
                 String bio = _bioController.text.trim();
                 String duo = _duoController.text.trim();
                 bool smartPhotos = _smartPhotosEnabled;
 
-                if (bio.isEmpty) {
-                  setState(() {
-                    _isError = true;
-                  });
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Por favor, llena el campo de descripción.')),
-                  );
-                  return;
-                }
+                // No necesitas validar si la descripción está vacía, simplemente puedes continuar
 
+                // Obtiene el usuario actual
                 Usuario? currentUser = Provider.of<UserManager>(context, listen: false).currentUser;
                 if (currentUser != null) {
+                  // Asigna la descripción, los intereses y las preferencias de fotos inteligentes al usuario
                   currentUser.setBio(bio);
                   currentUser.intereses = _selectedInterests;
                   currentUser.imagenesInteligentes = smartPhotos;
 
+                  // Si se proporcionó un DUO, intenta encontrar al amigo correspondiente
                   if (duo.isNotEmpty && duo != currentUser.email) {
                     Usuario? amigo = await Provider.of<UserManager>(context, listen: false).getUsuarioByEmail(duo);
                     if (amigo == null) {
@@ -268,12 +260,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   } else {
                     currentUser.amigo = null;
                   }
-
                   print(currentUser.nombre);
                   print(currentUser.bio);
                   print(currentUser.toString());
                   print(currentUser.amigo?.nombre);
                 }
+
+                //snackbar para mostrar mensaje de guardado
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Cambios guardados")),
+                );
 
                 setState(() {
                   _isError = false;
@@ -289,6 +285,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
               ),
             ),
+
 
           ],
         ),

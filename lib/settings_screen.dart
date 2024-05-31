@@ -19,6 +19,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
 
 
+
   List<String> comunidadesAutonomas = [
     'Andalucía', 'Aragón', 'Asturias', 'Baleares', 'Canarias', 'Cantabria',
     'Castilla y León', 'Castilla-La Mancha', 'Cataluña', 'Comunidad Valenciana',
@@ -26,11 +27,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     'La Rioja', 'Ceuta', 'Melilla'
   ];
   //edades de 18 a 100
-  List<int> edades = [18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
-    31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48,
-    49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66,
-    67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84,
-    85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100];
+  List<int> edades = [for (int i = 18; i <= 100; i += 1) i];
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +44,63 @@ class _SettingsScreenState extends State<SettingsScreen> {
     for (Usuario user in usuarios) {
       print('Usuario: ${user.nombre}' ' estamos en settings_screen.dart');
     }
+
+    double _currentSliderValue = 1;
+
+
+    Widget _buildSlider(String label, IconData icon) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Icon(icon, color: Colors.black),
+                    const SizedBox(width: 8),
+                    Text(
+                      label,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Slider(
+              value: currentUser!.distanciaFinal!.toDouble() ?? _currentSliderValue,
+              min: 0,
+              max: 200,
+              divisions: 200,
+              label: currentUser.distanciaFinal.toString() ?? _currentSliderValue.toString() ,
+              onChanged: (double value) {
+                setState(() {
+                  _currentSliderValue = value ;
+                  currentUser.distanciaFinal = value.toInt();
+                  print(currentUser.distanciaFinal);
+                });
+              },
+            ),
+            Text(
+              currentUser.distanciaFinal.toString()+' km' ?? _currentSliderValue.toString() + ' km',
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+
+
+
+
 
     return Scaffold(
       appBar: AppBar(
@@ -68,11 +122,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
               const Divider(color: Colors.white, thickness: 1,),
               _buildDropdown('Género', ['Mujer', 'Hombre', 'Otro'],Icons.person),
               const Divider(color: Colors.white, thickness: 1,),
-              _buildRangeSlider('Edades', Icons.calendar_month),
+              _buildRangeSlider('Edades', Icons.calendar_month,),
               const Divider(color: Colors.white, thickness: 1,),
               _buildSlider('Distancia', Icons.location_on),
               const Divider(color: Colors.white, thickness: 1,),
-              _buildToggleSwitch('Notificaciones', Icons.notifications_active),
+              _buildToggleSwitch('Notificaciones', Icons.notifications_active, currentUser!),
               const Divider(color: Colors.white, thickness: 1 ,),
               _buildDropdown('Privacidad', ['Público', 'Privado'],Icons.lock),
               const Divider(color: Colors.white, thickness: 1,),
@@ -102,57 +156,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  double _currentSliderValue = 1;
 
-  Widget _buildSlider(String label, IconData icon) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Icon(icon, color: Colors.black),
-                  const SizedBox(width: 8),
-                  Text(
-                    label,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          Slider(
-            value: _currentSliderValue,
-            min: 0,
-            max: 200,
-            divisions: 200,
-            label: _currentSliderValue.round().toString(),
-            onChanged: (double value) {
-              setState(() {
-                _currentSliderValue = value ;
-              });
-            },
-          ),
-          Text(
-            '${_currentSliderValue.round()} km',
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 16,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   RangeValues _currentRangeValues = const RangeValues(18, 100);
-
   Widget _buildRangeSlider(String label, IconData icon) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
@@ -242,37 +248,38 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
 
-   Widget _buildToggleSwitch(String label,IconData icon) {
-     return Padding(
-       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-       child: Row(
-         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-         children: [
-            Row(
-              children: [
-                Icon(icon, color: Colors.black),
-                const SizedBox(width: 8),
-                Text(
-                  label,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                  ),
+  Widget _buildToggleSwitch(String label, IconData icon, Usuario currentUser) {
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Icon(icon, color: Colors.black),
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
                 ),
-              ],
-            ),
-           Switch(
-             value: _switchValue,
-             onChanged: (bool newValue) {
-               setState(() {
-                 _switchValue = newValue;
-               });
-             },
-             activeColor: Colors.green,
-             inactiveThumbColor: Colors.red,
-           ),
-         ],
-       ),
-     );
-   }
+              ),
+            ],
+          ),
+          Switch(
+            value: currentUser.notificaciones ?? false,
+            onChanged: (bool newValue) {
+              setState(() {
+                currentUser.notificaciones = newValue;
+              });
+            },
+            activeColor: Colors.green,
+            inactiveThumbColor: Colors.red,
+          ),
+        ],
+      ),
+    );
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'Home.dart';
+import 'SecurityScreen.dart';
 import 'UserProvider.dart';
 import 'edit_profile.dart';
 import 'settings_screen.dart';
@@ -132,7 +133,7 @@ class UserProfileScreen extends StatelessWidget {
                 )
             );
           } else if (text == 'Seguridad') {
-            // Navigator.push(context,MaterialPageRoute(builder: (context) => SecurityScreen()));
+            Navigator.push(context,MaterialPageRoute(builder: (context) => SecurityScreen()));
           }
         },
       ),

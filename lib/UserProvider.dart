@@ -11,7 +11,7 @@ class UserManager extends ChangeNotifier {
     Usuario user1 = Usuario(
       nombre: 'Sandra',
       contrasena: '1234',
-      email: '',
+      email: 'sandra@mail.com',
       bio: 'Hola, soy Sandra, me gusta el cine y la música',
       intereses: ['Cine', 'Música'],
       genero: 'Femenino',
@@ -33,7 +33,7 @@ class UserManager extends ChangeNotifier {
     Usuario user2 = Usuario(
       nombre: 'Maria',
       contrasena: '1234',
-      email: '',
+      email: 'maria@mail.com',
       bio: 'Hola, soy Maria, me gusta el deporte y la lectura',
       intereses: ['Deporte', 'Lectura'],
       genero: 'Femenino',
@@ -55,7 +55,7 @@ class UserManager extends ChangeNotifier {
     Usuario user3 = Usuario(
       nombre: 'Carlos',
       contrasena: '1234',
-      email: '',
+      email: 'carlos@mail.com',
       bio: 'Hola, soy Carlos, me gusta la música y el cine',
       intereses: ['Música', 'Cine'],
       genero: 'Masculino',
@@ -134,6 +134,11 @@ class UserManager extends ChangeNotifier {
 
   void addUsuario(Usuario usuario) {
     _usuarios.add(usuario);
+    notifyListeners();
+  }
+
+  void removeUsuario(Usuario usuario) {
+    _usuarios.remove(usuario);
     notifyListeners();
   }
 
