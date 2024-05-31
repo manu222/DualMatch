@@ -238,6 +238,9 @@ class Usuario {
     return imagenesInteligentes;
   }
 
+  String getPassword() {
+    return contrasena;
+  }
 
   // Métodos para convertir a JSON y desde JSON
   Map<String, dynamic> toJson() {

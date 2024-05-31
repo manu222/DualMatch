@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 
+import 'UserProvider.dart';
 import 'Usuario.dart';
 
 class SettingsScreen extends StatefulWidget {
-  final Usuario? user;
-  const SettingsScreen({Key? key,this.user}) : super(key: key);
+
+
+   SettingsScreen({Key? key}) : super(key: key);
 
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
@@ -31,6 +34,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    List<Usuario>? usuarios = Provider.of<UserManager>(context).usuarios;
+    Usuario? currentUser = Provider.of<UserManager>(context).currentUser;
+
+    if (currentUser == null) {
+      print('No hay usuario estamos en settings_screen.dart');
+    } else {
+      print('Usuario: ${currentUser.nombre}' + ' estamos en settings_screen.dart');
+    }
+
+    for (Usuario user in usuarios) {
+      print('Usuario: ${user.nombre}' ' estamos en settings_screen.dart');
+    }
 
     return Scaffold(
       appBar: AppBar(

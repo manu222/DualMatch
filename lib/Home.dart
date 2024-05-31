@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:test_app/UserProvider.dart';
 import 'package:test_app/Usuario.dart';
 import 'package:test_app/perfil.dart';
-import 'Matches.dart';
+import 'main.dart';
 
 class PantallaPrincipal extends StatefulWidget {
-  final Usuario? currentUser;
-  List<Usuario>? usuarios;
-  PantallaPrincipal({
-    super.key,
-    required this.currentUser,
-    this.usuarios,
-  });
+
+  PantallaPrincipal({super.key,});
 
   @override
   _PantallaPrincipalState createState() => _PantallaPrincipalState();
@@ -31,7 +28,7 @@ void mostrarIconoFlotante(BuildContext context, IconData icono, String mensaje) 
           const SizedBox(height: 10),
           Text(
             mensaje,
-            style: TextStyle(color: Colors.red, fontSize: 24),
+            style: const TextStyle(color: Colors.red, fontSize: 24),
           ),
         ],
       ),
@@ -46,129 +43,14 @@ void mostrarIconoFlotante(BuildContext context, IconData icono, String mensaje) 
 class _PantallaPrincipalState extends State<PantallaPrincipal> {
   int indiceActual = 0;
 
-  late Usuario user1;
-  late Usuario user2;
-  late Usuario user3;
-  late Usuario user4;
+
+
 
   @override
   void initState() {
     super.initState();
-    user1 = Usuario(
-      nombre: 'Sandra',
-      contrasena: '1234',
-      email: '',
-      bio: 'Hola, soy Sandra, me gusta el cine y la música',
-      intereses: ['Cine', 'Música'],
-      genero: 'Femenino',
-      edadInicial: 18,
-      edadFinal: 30,
-      distanciaInicial: 0,
-      distanciaFinal: 10,
-      notificaciones: true,
-      privacidad: 'Público',
-      region: 'España',
-      idioma: 'Español',
-      imagenesInteligentes: true,
-      telefono: 1234567890,
-      amigo: null,
-      likes: [],
-      matches: [],
-      chats: [],
-    );
-    user2 = Usuario(
-      nombre: 'Maria',
-      contrasena: '1234',
-      email: '',
-      bio: 'Hola, soy Maria, me gusta el deporte y la lectura',
-      intereses: ['Deporte', 'Lectura'],
-      genero: 'Femenino',
-      edadInicial: 18,
-      edadFinal: 30,
-      distanciaInicial: 0,
-      distanciaFinal: 10,
-      notificaciones: true,
-      privacidad: 'Público',
-      region: 'España',
-      idioma: 'Español',
-      imagenesInteligentes: true,
-      telefono: 1234567890,
-      amigo: null,
-      likes: [],
-      matches: [],
-      chats: [],
-    );
-    user3 = Usuario(
-      nombre: 'Carlos',
-      contrasena: '1234',
-      email: '',
-      bio: 'Hola, soy Carlos, me gusta la música y el cine',
-      intereses: ['Música', 'Cine'],
-      genero: 'Masculino',
-      edadInicial: 18,
-      edadFinal: 30,
-      distanciaInicial: 0,
-      distanciaFinal: 10,
-      notificaciones: true,
-      privacidad: 'Público',
-      region: 'España',
-      idioma: 'Español',
-      imagenesInteligentes: true,
-      telefono: 1234567890,
-      amigo: null,
-      likes: [],
-      matches: [],
-      chats: [],
-    );
-    user4 = Usuario(
-      nombre: 'Pedro',
-      contrasena: '1234',
-      email: 'pedro@mail.com',
-      bio: 'Hola, soy Pedro, me gusta el deporte y la lectura',
-      intereses: ['Deporte', 'Lectura'],
-      genero: 'Masculino',
-      edadInicial: 18,
-      edadFinal: 30,
-      distanciaInicial: 0,
-      distanciaFinal: 10,
-      notificaciones: true,
-      privacidad: 'Público',
-      region: 'España',
-      idioma: 'Español',
-      imagenesInteligentes: true,
-      telefono: 1234567890,
-      amigo: null,
-      likes: [],
-      matches: [],
-      chats: [],
-    );
 
-    user1.setAmigo(user2);
-    user2.setAmigo(user1);
-    user3.setAmigo(user4);
-    user4.setAmigo(user3);
 
-    user1.setLikes([user3]);
-    user2.setLikes([user4]);
-    user3.setLikes([user1]);
-    user4.setLikes([user2]);
-
-    List<Matches> matches1 = [Matches(usuarios: [user3, user4])];
-    List<Matches> matches2 = [Matches(usuarios: [user1, user2])];
-
-    user1.setMatches(matches1);
-    user2.setMatches(matches1);
-    user3.setMatches(matches2);
-    user4.setMatches(matches2);
-
-    user1.setChats([user2.nombre, user3.nombre, user4.nombre]);
-    user2.setChats([user1.nombre, user3.nombre, user4.nombre]);
-    user3.setChats([user1.nombre, user2.nombre, user4.nombre]);
-    user4.setChats([user1.nombre, user2.nombre, user3.nombre]);
-
-    widget.currentUser!.setMatches(matches2);
-    widget.currentUser!.setChats([user1.nombre, user2.nombre, user3.nombre, user4.nombre]);
-    widget.currentUser!.setAmigo(user3);
   }
 
   final List<String> images = [
@@ -178,8 +60,34 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
     'assets/U4.jpg',
   ];
 
+  final List<String> titulos = [
+    'Personas',
+    'Matches',
+    'Perfil',
+  ];
+
+
   @override
   Widget build(BuildContext context) {
+    List<Usuario> usuarios = Provider.of<UserManager>(context).usuarios;
+    Usuario? currentUser = Provider.of<UserManager>(context).currentUser;
+
+    Usuario user1 = usuarios[0];
+    Usuario user2 = usuarios[1];
+    Usuario user3 = usuarios[2];
+    Usuario user4 = usuarios[3];
+
+    if (currentUser == null) {
+      print('No hay usuario estamos en home.dart');
+    } else {
+      print('Usuario: ${currentUser.nombre}'' estamos en Home.dart');
+    }
+
+    print('Usuarios: ${usuarios.length}');
+    for (Usuario user in usuarios) {
+      print('Usuario: ${user.nombre}'' estamos en Home.dart');
+    }
+
     final List<Widget> pantallas = [
       images.isEmpty
           ? Center(
@@ -245,18 +153,23 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
         children: images.map((image) {
           int index = images.indexOf(image);
           String userName;
+          String? Bio;
           switch (index) {
             case 0:
               userName = user1.nombre;
+              Bio = user1.bio;
               break;
             case 1:
               userName = user2.nombre;
+              Bio = user2.bio;
               break;
             case 2:
               userName = user3.nombre;
+              Bio = user3.bio;
               break;
             case 3:
               userName = user4.nombre;
+              Bio = user4.bio;
               break;
             default:
               userName = 'Usuario desconocido';
@@ -304,11 +217,11 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
                           ),
                         ),
                         child: Text(
-                          userName,
+                          '$userName' ':'
+                              '\n$Bio',
                           style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
                           ),
                         ),
                       ),
@@ -374,13 +287,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
       const Center(child: Text('Perfil del usuario')),
     ];
 
-    final List<String> titulos = [
-      'Personas',
-      'Matches',
-      'Perfil',
-    ];
 
-    String titulo = titulos[indiceActual];
 
     return Scaffold(
       appBar: AppBar(
@@ -389,11 +296,13 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
           IconButton(
             icon: const Icon(Icons.logout, color: Colors.white),
             onPressed: () {
-              Navigator.pushNamed(context, '/main', arguments: widget.currentUser);
+            Provider.of<UserManager>(context, listen: false).logout();
+
+              Navigator.push(context, MaterialPageRoute(builder: (context) => VistaInicial()));
             },
           ),
         ],
-        title: Text(titulo),
+        title: Text(titulos[indiceActual]),
         backgroundColor: Colors.pink,
       ),
       body: pantallas[indiceActual],
@@ -424,9 +333,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => UserProfileScreen(
-                  currentUser: widget.currentUser,
-                ),
+                builder: (context) => UserProfileScreen(),
               ),
             );
           }
@@ -435,3 +342,4 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
     );
   }
 }
+

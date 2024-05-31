@@ -1,37 +1,60 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/UserHelper.dart';
-import 'Home.dart';
-import 'Usuario.dart';
+import 'package:provider/provider.dart';
+import 'package:test_app/Home.dart';
+import 'package:test_app/Usuario.dart';
+
+import 'UserProvider.dart';
+import 'main.dart';
 
 class Login extends StatefulWidget {
-  final Usuario? user;
-  List<Usuario>? usuarios;
 
-  Login({super.key, this.user, this.usuarios});
+
+  Login({Key? key}) : super(key: key);
 
   @override
   _LoginState createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
-
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String? _emailError = '';
   String? _passwordError = '';
 
-  Future<bool> isAuthenticated(String email, String password) async {
-    Usuario? user = await UserHelper.getUserByMailAndPassword(email, password);
-    return user != null;
-  }
 
   @override
   Widget build(BuildContext context) {
+
+    List<Usuario>? usuarios = Provider.of<UserManager>(context).usuarios;
+    Usuario? user = Provider.of<UserManager>(context).currentUser;
+
+    if (user == null) {
+      print('No hay usuario estamos en login.dart');
+    } else {
+      print('Usuario: ${user.nombre}'+  ' estamos en login.dart');
+    }
+
+    print('Usuarios: ${usuarios.length}');
+    for (Usuario user in usuarios) {
+      print('Usuario: ${user.nombre}'+' estamos en login.dart');
+    }
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
         title: const Text('Login'),
         backgroundColor: Colors.pink,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => VistaInicial(),
+              ),
+            );
+          },
+        ),
       ),
       backgroundColor: Colors.pink[100],
       body: Padding(
@@ -45,7 +68,11 @@ class _LoginState extends State<Login> {
                 filled: true,
                 fillColor: Colors.grey[200],
                 labelText: 'Email',
-                labelStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15),
+                labelStyle: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
                 errorText: _emailError == '' ? null : _emailError,
                 hintText: 'Introduce tu email',
                 hintStyle: TextStyle(color: Colors.grey[600]),
@@ -58,7 +85,11 @@ class _LoginState extends State<Login> {
                 filled: true,
                 fillColor: Colors.grey[200],
                 labelText: 'Contraseña',
-                labelStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15),
+                labelStyle: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
                 errorText: _passwordError == '' ? null : _passwordError,
                 hintText: 'Introduce tu contraseña',
                 hintStyle: TextStyle(color: Colors.grey[600]),
@@ -72,6 +103,7 @@ class _LoginState extends State<Login> {
                 onPressed: () async {
                   final email = _emailController.text;
                   final password = _passwordController.text;
+
                   if (email.isEmpty || password.isEmpty) {
                     setState(() {
                       _emailError = email.isEmpty ? 'Por favor, llena este campo' : '';
@@ -83,35 +115,41 @@ class _LoginState extends State<Login> {
                       ),
                     );
                   } else {
-                    if (await UserHelper.existsUser(email)) {
-                      if (await isAuthenticated(email, password)) {
-                        Usuario? currentUser = await UserHelper.getUserByMailAndPassword(email, password);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PantallaPrincipal(currentUser: currentUser, usuarios: widget.usuarios),
-                          ),
-                        );
-                      } else {
-                        setState(() {
-                          _passwordError = 'Contraseña incorrecta';
-                        });
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Email o contraseña incorrectos'),
-                          ),
-                        );
+
+                    // Verificar la autenticación del usuario
+                    Usuario? authenticatedUser;
+                    bool userExists = false;
+
+                    if (usuarios != null) {
+                      int i = 0;
+                      while (i < usuarios.length && !userExists) {
+                        if (usuarios[i].email == email && usuarios[i].getPassword() == password) {
+                          userExists = true;
+                          authenticatedUser = usuarios[i];
+                        }
+                        i++;
                       }
+
+                    }
+
+                    if (userExists) {
+                      Provider.of<UserManager>(context, listen: false).setCurrentUser(authenticatedUser!);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PantallaPrincipal(),
+                        ),
+                      );
                     } else {
-                      setState(() {
-                        _emailError = 'El usuario no existe';
-                      });
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('El usuario no existe'),
+                          content: Text('Email o contraseña incorrectos'),
                         ),
                       );
                     }
+
+
+
                   }
                 },
                 style: ElevatedButton.styleFrom(

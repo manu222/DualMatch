@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:test_app/perfil.dart';
-import 'Matches.dart';
-import 'UserHelper.dart';
+
+import 'UserProvider.dart';
 import 'Usuario.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  final Usuario? currentUser;
-
-
-   EditProfileScreen({
-    Key? key, this.currentUser
+  EditProfileScreen({
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -19,7 +17,6 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
   bool _isError = false;
-
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _duoController = TextEditingController();
 
@@ -63,141 +60,32 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   List<String> _selectedInterests = [];
   bool _smartPhotosEnabled = true;
-  late Usuario user1;
-  late Usuario user2;
-  late Usuario user3;
-  late Usuario user4;
 
   @override
   void initState() {
     super.initState();
-    user1 = Usuario(
-      nombre: 'Sandra',
-      contrasena: '1234',
-      email: 'sandra@gmail.com',
-      bio: 'Hola, soy Sandra, me gusta el cine y la música',
-      intereses: ['Cine', 'Música'],
-      genero: 'Femenino',
-      edadInicial: 18,
-      edadFinal: 30,
-      distanciaInicial: 0,
-      distanciaFinal: 10,
-      notificaciones: true,
-      privacidad: 'Público',
-      region: 'España',
-      idioma: 'Español',
-      imagenesInteligentes: true,
-      telefono: 1234567890,
-      amigo: null,
-      likes: [],
-      matches: [],
-      chats: [],
-    );
-    user2 = Usuario(
-      nombre: 'Maria',
-      contrasena: '1234',
-      email: 'maria@gmail.com',
-      bio: 'Hola, soy Maria, me gusta el deporte y la lectura',
-      intereses: ['Deporte', 'Lectura'],
-      genero: 'Femenino',
-      edadInicial: 18,
-      edadFinal: 30,
-      distanciaInicial: 0,
-      distanciaFinal: 10,
-      notificaciones: true,
-      privacidad: 'Público',
-      region: 'España',
-      idioma: 'Español',
-      imagenesInteligentes: true,
-      telefono: 1234567890,
-      amigo: null,
-      likes: [],
-      matches: [],
-      chats: [],
-    );
-    user3 = Usuario(
-      nombre: 'Carlos',
-      contrasena: '1234',
-      email: 'carlos@gmail.com',
-      bio: 'Hola, soy Carlos, me gusta la música y el cine',
-      intereses: ['Música', 'Cine'],
-      genero: 'Masculino',
-      edadInicial: 18,
-      edadFinal: 30,
-      distanciaInicial: 0,
-      distanciaFinal: 10,
-      notificaciones: true,
-      privacidad: 'Público',
-      region: 'España',
-      idioma: 'Español',
-      imagenesInteligentes: true,
-      telefono: 1234567890,
-      amigo: null,
-      likes: [],
-      matches: [],
-      chats: [],
-    );
-    user4 = Usuario(
-      nombre: 'Pedro',
-      contrasena: '1234',
-      email: 'pedro@mail.com',
-      bio: 'Hola, soy Pedro, me gusta el deporte y la lectura',
-      intereses: ['Deporte', 'Lectura'],
-      genero: 'Masculino',
-      edadInicial: 18,
-      edadFinal: 30,
-      distanciaInicial: 0,
-      distanciaFinal: 10,
-      notificaciones: true,
-      privacidad: 'Público',
-      region: 'España',
-      idioma: 'Español',
-      imagenesInteligentes: true,
-      telefono: 1234567890,
-      amigo: null,
-      likes: [],
-      matches: [],
-      chats: [],
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Usuario? currentUser = Provider.of<UserManager>(context, listen: false).currentUser;
 
-    user1.setAmigo(user2);
-    user2.setAmigo(user1);
-    user3.setAmigo(user4);
-    user4.setAmigo(user3);
-
-    user1.setLikes([user3]);
-    user2.setLikes([user4]);
-    user3.setLikes([user1]);
-    user4.setLikes([user2]);
-
-    List<Matches> matches1 = [Matches(usuarios: [user3, user4])];
-    List<Matches> matches2 = [Matches(usuarios: [user1, user2])];
-
-    user1.setMatches(matches1);
-    user2.setMatches(matches1);
-    user3.setMatches(matches2);
-    user4.setMatches(matches2);
-
-    user1.setChats([user2.nombre, user3.nombre, user4.nombre]);
-    user2.setChats([user1.nombre, user3.nombre, user4.nombre]);
-    user3.setChats([user1.nombre, user2.nombre, user4.nombre]);
-    user4.setChats([user1.nombre, user2.nombre, user3.nombre]);
-
-    widget.currentUser!.setMatches(matches2);
-    widget.currentUser!.setChats([user1.nombre, user2.nombre, user3.nombre, user4.nombre]);
-    widget.currentUser!.setAmigo(user3);
-    _bioController.text = widget.currentUser!.bio ?? '';
-    _selectedInterests = widget.currentUser!.intereses ?? [];
-    _smartPhotosEnabled = widget.currentUser!.imagenesInteligentes ?? true;
-    _duoController.text = widget.currentUser!.amigo?.email ?? '';
-    _smartPhotosEnabled = widget.currentUser!.imagenesInteligentes ?? true;
-
-    List<Usuario> users = [user1, user2, user3, user4];
-
+      if (currentUser != null) {
+        _bioController.text = currentUser.bio ?? '';
+        _selectedInterests = currentUser.intereses ?? [];
+        _smartPhotosEnabled = currentUser.imagenesInteligentes ?? true;
+        _duoController.text = currentUser.amigo?.email ?? '';
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    Usuario? currentUser = Provider.of<UserManager>(context).currentUser;
+
+    if (currentUser == null) {
+      print('No hay usuario actual en edit_profile.dart');
+    } else {
+      print('Usuario: ${currentUser.nombre} en edit_profile.dart');
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.pink,
@@ -208,9 +96,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => UserProfileScreen(
-                  currentUser: widget.currentUser,
-                ),
+                builder: (context) => UserProfileScreen(),
               ),
             );
           },
@@ -266,7 +152,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   .map((interest) => MultiSelectItem<String>(interest, interest))
                   .toList(),
               title: const Text("Intereses"),
-              searchable: true, // Habilitar búsqueda
+              searchable: true,
               searchHint: 'Buscar intereses',
               selectedColor: Colors.pink,
               decoration: BoxDecoration(
@@ -288,6 +174,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   fontSize: 16,
                 ),
               ),
+              initialValue: _selectedInterests,
               onConfirm: (results) {
                 setState(() {
                   _selectedInterests = results.cast<String>();
@@ -295,8 +182,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               },
             ),
             const SizedBox(height: 16.0),
-            Text('Tus intereses: ${_selectedInterests.join(', ')}',
-                style: const TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16.0)),
+            Text(
+              'Tus intereses: ${_selectedInterests.join(', ')}',
+              style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16.0),
+            ),
             const SizedBox(height: 16.0),
             TextField(
               controller: _duoController,
@@ -315,7 +204,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   onPressed: () {
                     setState(() {
                       _duoController.clear();
-                      widget.currentUser!.amigo = null;
+                      currentUser?.amigo = null;
                     });
                   },
                 ),
@@ -326,70 +215,81 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               'Si tienes un amigo que también usa la app, puedes agregar su correo aquí para que puedan ser DUO.',
               style: TextStyle(color: Colors.black),
             ),
-            const Text('Si no tienes un amigo, puedes dejar este campo vacío.',
-                style: TextStyle(color: Colors.black)),
-            Text('DUO actual: ${widget.currentUser!.amigo?.email ?? 'No tienes DUO'}',
-                style: const TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16.0)
+            const Text(
+              'Si no tienes un amigo, puedes dejar este campo vacío.',
+              style: TextStyle(color: Colors.black),
+            ),
+            Text(
+              'DUO actual: ${currentUser?.amigo?.email ?? 'No tienes DUO'}',
+              style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16.0),
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () async {
-                //quiero actualizar los datos del usuario actual tanto en la lista de usuarios como en los datos actuales
-                String bio = _bioController.text;
-                String duo = _duoController.text;
+                String bio = _bioController.text.trim();
+                String duo = _duoController.text.trim();
                 bool smartPhotos = _smartPhotosEnabled;
 
-                widget.currentUser!.bio = bio;
-                widget.currentUser!.intereses = _selectedInterests;
-                widget.currentUser!.imagenesInteligentes = smartPhotos;
-
-                Usuario? amigo = await UserHelper.getSpecificUser(_duoController.text);
-                if (amigo?.email == "" && _duoController.text.isNotEmpty || user1.email!=_duoController.text || user2.email!=_duoController.text || user3.email!=_duoController.text || user4.email!=_duoController.text) {
+                if (bio.isEmpty) {
                   setState(() {
                     _isError = true;
                   });
                   ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("No se encontró el usuario, pero se guardaron el resto de los cambios."))
+                    const SnackBar(content: Text('Por favor, llena el campo de descripción.')),
                   );
-                }else if(_duoController.text==widget.currentUser!.email){
-                  setState(() {
-                    _isError = true;
-                  });
-                  ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("No puedes ser tu propio amigo, pero se guardaron el resto de los cambios."))
-                  );
-                }else{
-                  widget.currentUser?.amigo = amigo;
-
+                  return;
                 }
 
-                UserHelper.saveSpecificUser(widget.currentUser!);
-                print(widget.currentUser!.nombre);
-                print(widget.currentUser!.bio);
-                print(widget.currentUser!.toString());
-                print(widget.currentUser!.amigo?.nombre);
+                Usuario? currentUser = Provider.of<UserManager>(context, listen: false).currentUser;
+                if (currentUser != null) {
+                  currentUser.setBio(bio);
+                  currentUser.intereses = _selectedInterests;
+                  currentUser.imagenesInteligentes = smartPhotos;
 
-/*
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => UserProfileScreen(
-                      currentUser: widget.currentUser,
-                    ),
-                  ),
-                );
+                  if (duo.isNotEmpty && duo != currentUser.email) {
+                    Usuario? amigo = await Provider.of<UserManager>(context, listen: false).getUsuarioByEmail(duo);
+                    if (amigo == null) {
+                      setState(() {
+                        _isError = true;
+                      });
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("No se encontró el usuario, pero se guardaron el resto de los cambios.")),
+                      );
+                    } else {
+                      currentUser.amigo = amigo;
+                    }
+                  } else if (duo == currentUser.email) {
+                    setState(() {
+                      _isError = true;
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("No puedes ser tu propio amigo, pero se guardaron el resto de los cambios.")),
+                    );
+                  } else {
+                    currentUser.amigo = null;
+                  }
 
- */
+                  print(currentUser.nombre);
+                  print(currentUser.bio);
+                  print(currentUser.toString());
+                  print(currentUser.amigo?.nombre);
+                }
+
+                setState(() {
+                  _isError = false;
+                });
               },
               child: const Text('Guardar cambios'),
               style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white, backgroundColor: Colors.pink,
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.pink,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                   side: const BorderSide(color: Colors.black, width: 1.3),
                 ),
               ),
             ),
+
           ],
         ),
       ),
