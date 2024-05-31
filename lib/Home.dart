@@ -247,7 +247,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
-                        Icons.close ,
+                        Icons.close,
                         color: Colors.red,
                       ),
                     ),
