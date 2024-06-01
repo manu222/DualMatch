@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'Home.dart';
+import 'PantallaPrincipal.dart';
 import 'SecurityScreen.dart';
 import 'UserProvider.dart';
-import 'edit_profile.dart';
-import 'settings_screen.dart';
+import 'EditProfileScreen.dart';
+import 'SettingsScreen.dart';
 import 'Usuario.dart';
 
 class UserProfileScreen extends StatelessWidget {
@@ -23,13 +23,13 @@ class UserProfileScreen extends StatelessWidget {
     ];
 
     if (currentUser == null) {
-      print('No hay usuario estamos en perfil.dart');
+      print('No hay usuario estamos en UserProfileScreen.dart');
     } else {
-      print('Usuario: ${currentUser.nombre}' + ' estamos en perfil.dart');
+      print('Usuario: ${currentUser.nombre}' + ' estamos en UserProfileScreen.dart');
     }
 
     for (Usuario user in usuarios) {
-      print('Usuario: ${user.nombre}' + ' estamos en perfil.dart');
+      print('Usuario: ${user.nombre}' + ' estamos en UserProfileScreen.dart');
     }
 
     // Índice de la imagen del usuario actual
@@ -48,6 +48,7 @@ class UserProfileScreen extends StatelessWidget {
         automaticallyImplyLeading: true,
         backgroundColor: Colors.pink,
         title: const Text('Perfil'),
+        centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

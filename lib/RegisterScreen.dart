@@ -4,7 +4,7 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:provider/provider.dart';
 import 'package:test_app/UserProvider.dart';
 
-import 'Home.dart';
+import 'PantallaPrincipal.dart';
 import 'Usuario.dart';
 import 'main.dart';
 
@@ -57,17 +57,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
 
     if (user == null) {
-      print('No hay usuario en register.dart');
+      print('No hay usuario en RegisterScreen.dart');
     } else {
-      print('Usuario: ${user.nombre}'+  ' estamos en register.dart');
+      print('Usuario: ${user.nombre}'+  ' estamos en RegisterScreen.dart');
     }
 
     if (usuarios.isEmpty) {
-      print('No hay usuarios en register.dart');
+      print('No hay usuarios en RegisterScreen.dart');
     } else {
       print('Usuarios: ${usuarios.length}');
       for (var user in usuarios) {
-        print('Usuario: ${user.nombre}'+  ' estamos en register.dart');
+        print('Usuario: ${user.nombre}'+  ' estamos en RegisterScreen.dart');
       }
     }
 

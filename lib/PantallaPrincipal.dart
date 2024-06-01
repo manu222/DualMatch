@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:test_app/UserProvider.dart';
 import 'package:test_app/Usuario.dart';
-import 'package:test_app/perfil.dart';
+import 'package:test_app/UserProfileScreen.dart';
 import 'main.dart';
-import 'chat_individual.dart';  // Importa la nueva pantalla
+import 'Matches.dart';  // Importa la nueva pantalla
 
 class PantallaPrincipal extends StatefulWidget {
   PantallaPrincipal({super.key,});
@@ -74,12 +74,12 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
     if (currentUser == null) {
       print('No hay usuario estamos en home.dart');
     } else {
-      print('Usuario: ${currentUser.nombre}'' estamos en Home.dart');
+      print('Usuario: ${currentUser.nombre}'' estamos en PantallaPrincipal.dart');
     }
 
     print('Usuarios: ${usuarios.length}');
     for (Usuario user in usuarios) {
-      print('Usuario: ${user.nombre}'' estamos en Home.dart');
+      print('Usuario: ${user.nombre}'' estamos en PantallaPrincipal.dart');
     }
 
     final List<Widget> pantallas = [
@@ -180,7 +180,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
                     IconData icono = Icons.error;
                     if (direction == DismissDirection.endToStart) {
                       icono = Icons.close;
-                      mensaje = 'Rechazado';
+                      mensaje = 'No me gusta';
                     } else if (direction == DismissDirection.startToEnd) {
                       icono = Icons.favorite;
                       mensaje = 'Me gusta';
@@ -284,6 +284,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        centerTitle: true,
         actions: [
           IconButton(
             icon: const Icon(Icons.logout, color: Colors.white),
@@ -333,7 +334,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ChatIndividual(),
+                builder: (context) => Matches(),
               ),
             );
           }

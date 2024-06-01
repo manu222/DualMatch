@@ -57,6 +57,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
+        centerTitle: true,
         backgroundColor: Colors.pink,
         title: const Text('Seguridad'),
         leading: IconButton(
@@ -175,7 +176,9 @@ class _SecurityScreenState extends State<SecurityScreen> {
                         onPressed: () {
                           // Acción al cerrar sesión
                           Provider.of<UserManager>(context, listen: false).logout();
-
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Sesión cerrada')),
+                          );
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -203,6 +206,10 @@ class _SecurityScreenState extends State<SecurityScreen> {
                           // Acción al eliminar cuenta
                           Provider.of<UserManager>(context, listen: false).removeUsuario(currentUser!);
                           Provider.of<UserManager>(context, listen: false).logout();
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Su cuenta ha sido eliminada')),
+                          );
 
                           Navigator.push(
                             context,

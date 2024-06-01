@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:test_app/perfil.dart';
+import 'package:test_app/UserProfileScreen.dart';
 
 import 'UserProvider.dart';
 import 'Usuario.dart';
@@ -82,14 +82,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     Usuario? currentUser = Provider.of<UserManager>(context).currentUser;
 
     if (currentUser == null) {
-      print('No hay usuario actual en edit_profile.dart');
+      print('No hay usuario actual en EditProfileScreen.dart');
     } else {
-      print('Usuario: ${currentUser.nombre} en edit_profile.dart');
+      print('Usuario: ${currentUser.nombre} en EditProfileScreen.dart');
     }
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.pink,
+        centerTitle: true,
         title: const Text('Editar Perfil'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -250,6 +251,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       );
                     } else {
                       currentUser.amigo = amigo;
+                      amigo.amigo?.amigo = null;
                       amigo.amigo = currentUser;
                     }
                   } else if (duo == currentUser.email) {

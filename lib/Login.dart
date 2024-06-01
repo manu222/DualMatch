@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:test_app/Home.dart';
+import 'package:test_app/PantallaPrincipal.dart';
 import 'package:test_app/Usuario.dart';
 
 import 'UserProvider.dart';
@@ -43,6 +43,7 @@ class _LoginState extends State<Login> {
       appBar: AppBar(
         automaticallyImplyLeading: true,
         title: const Text('Login'),
+        centerTitle: true,
         backgroundColor: Colors.pink,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -134,6 +135,11 @@ class _LoginState extends State<Login> {
 
                     if (userExists) {
                       Provider.of<UserManager>(context, listen: false).setCurrentUser(authenticatedUser!);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Inicio de sesión exitoso'),
+                        ),
+                      );
                       Navigator.push(
                         context,
                         MaterialPageRoute(

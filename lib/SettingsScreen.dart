@@ -36,13 +36,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
     Usuario? currentUser = Provider.of<UserManager>(context).currentUser;
 
     if (currentUser == null) {
-      print('No hay usuario estamos en settings_screen.dart');
+      print('No hay usuario estamos en SettingsScreen.dart');
     } else {
-      print('Usuario: ${currentUser.nombre}' + ' estamos en settings_screen.dart');
+      print('Usuario: ${currentUser.nombre}' + ' estamos en SettingsScreen.dart');
     }
 
     for (Usuario user in usuarios) {
-      print('Usuario: ${user.nombre}' ' estamos en settings_screen.dart');
+      print('Usuario: ${user.nombre}' ' estamos en SettingsScreen.dart');
     }
 
     double _currentSliderValue = 1;
@@ -106,6 +106,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(
         backgroundColor: Colors.pink,
         title: const Text('Ajustes de perfil'),
+        centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -137,7 +138,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Cambios guardados')),
+                  );
                   print('Cambios guardados');
                 },
                 child: const Text('Guardar cambios'),

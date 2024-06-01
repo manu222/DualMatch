@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'UserProvider.dart';
 import 'Usuario.dart';
-import 'register.dart';
+import 'RegisterScreen.dart';
 import 'login.dart';
 
 

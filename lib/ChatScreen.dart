@@ -35,9 +35,47 @@ class _ChatScreenState extends State<ChatScreen> {
     Usuario? currentUser = Provider.of<UserManager>(context).currentUser;
     Usuario? chatUser = Provider.of<UserManager>(context).chatUser;
 
+    List<String> ImagenesPreSets = [
+      'assets/U1.jpg',
+      'assets/U2.jpg',
+      'assets/U3.jpg',
+      'assets/U4.jpg',
+    ];
+
+    String? chatUserImage;
+
+    if(chatUser?.email == 'sandra@mail.com'){
+      chatUserImage = ImagenesPreSets[0];
+    } else if(chatUser?.email == 'maria@mail.com'){
+      chatUserImage = ImagenesPreSets[1];
+    } else if(chatUser?.email == 'carlos@mail.com'){
+      chatUserImage = ImagenesPreSets[2];
+    } else if(chatUser?.email == 'pedro@mail.com'){
+      chatUserImage = ImagenesPreSets[3];
+    }else{
+      chatUserImage = 'assets/icon.png';
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat de ${chatUser?.nombre ?? 'User'}'),
+        title: Row(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.white, width: 1),
+              ),
+              child: CircleAvatar(
+                radius: 23,
+                backgroundColor: Colors.white,
+                backgroundImage: AssetImage(chatUserImage),
+              ),
+            ),
+            SizedBox(width: 10),
+            Text(chatUser?.nombre ?? ''),
+          ],
+        ),
+        centerTitle: true,
         backgroundColor: Colors.pink,
       ),
       body: Consumer<UserManager>(
