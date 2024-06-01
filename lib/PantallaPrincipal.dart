@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:test_app/Matches.dart';
 import 'package:test_app/UserProvider.dart';
 import 'package:test_app/Usuario.dart';
 import 'package:test_app/UserProfileScreen.dart';
 import 'main.dart';
-import 'Matches.dart';  // Importa la nueva pantalla
 
 class PantallaPrincipal extends StatefulWidget {
   PantallaPrincipal({super.key,});
