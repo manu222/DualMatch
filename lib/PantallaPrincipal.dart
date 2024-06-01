@@ -297,12 +297,15 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
         title: Text(titulos[indiceActual]),
         backgroundColor: Colors.pink,
       ),
-      body: pantallas[indiceActual],
+      body: Container(
+        color: Colors.pink[100],
+        child: pantallas[indiceActual],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: indiceActual,
         selectedItemColor: Colors.pink,
         unselectedItemColor: Colors.black,
-        backgroundColor: Colors.pink[100],
+        backgroundColor: Colors.pink[200],
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.people),
