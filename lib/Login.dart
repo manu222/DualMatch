@@ -141,6 +141,12 @@ class _LoginState extends State<Login> {
                         ),
                       );
                     } else {
+
+                      setState(() {
+                        _emailError = 'Email o contraseña incorrectos';
+                        _passwordError = 'Email o contraseña incorrectos';
+
+                      });
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('Email o contraseña incorrectos'),

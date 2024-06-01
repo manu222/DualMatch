@@ -1,4 +1,5 @@
-import 'Matches.dart';
+import 'package:test_app/Chat.dart';
+
 
 class Usuario {
   String nombre;
@@ -7,8 +8,8 @@ class Usuario {
   String email;
   int telefono;
   List<Usuario> likes;
-  List<Matches> matches;
-  List<String> chats;
+  List<Usuario> matches;
+  List<Chat> chats;
   String? bio;
   List<String>? intereses;
   String? genero;
@@ -45,17 +46,9 @@ class Usuario {
     this.imagenesInteligentes,
   });
 
-//haz getters y setters
+  // Getters y setters
   String getNombre() {
     return nombre;
-  }
-
-  void setMail(String email) {
-    this.email = email;
-  }
-
-  String getMail() {
-    return email;
   }
 
   void setNombre(String nombre) {
@@ -78,6 +71,22 @@ class Usuario {
     this.amigo = amigo;
   }
 
+  String getEmail() {
+    return email;
+  }
+
+  void setEmail(String email) {
+    this.email = email;
+  }
+
+  int getTelefono() {
+    return telefono;
+  }
+
+  void setTelefono(int telefono) {
+    this.telefono = telefono;
+  }
+
   List<Usuario> getLikes() {
     return likes;
   }
@@ -86,19 +95,19 @@ class Usuario {
     this.likes = likes;
   }
 
-  List<Matches> getMatches() {
+  List<Usuario> getMatches() {
     return matches;
   }
 
-  void setMatches(List<Matches> matches) {
+  void setMatches(List<Usuario> matches) {
     this.matches = matches;
   }
 
-  List<String> getChats() {
+  List<Chat> getChats() {
     return chats;
   }
 
-  void setChats(List<String> chats) {
+  void setChats(List<Chat> chats) {
     this.chats = chats;
   }
 
@@ -106,40 +115,24 @@ class Usuario {
     likes.add(like);
   }
 
-  void addMatch(Matches match) {
+  void addMatch(Usuario match) {
     matches.add(match);
   }
 
-  void addChat(String chat) {
+  void addChat(Chat chat) {
     chats.add(chat);
   }
 
-  void removeLike(String like) {
+  void removeLike(Usuario like) {
     likes.remove(like);
   }
 
-  void removeMatch(Matches match) {
+  void removeMatch(Usuario match) {
     matches.remove(match);
   }
 
   void removeChat(String chat) {
     chats.remove(chat);
-  }
-
-  void setTelefono(int telefono) {
-    this.telefono = telefono;
-  }
-
-  int getTelefono() {
-    return telefono;
-  }
-
-  void setEmail(String email) {
-    this.email = email;
-  }
-
-  String getEmail() {
-    return email;
   }
 
   void setBio(String bio) {
@@ -265,7 +258,6 @@ class Usuario {
       'region': region,
       'idioma': idioma,
       'imagenesInteligentes': imagenesInteligentes,
-
     };
   }
 
@@ -276,11 +268,9 @@ class Usuario {
       telefono: json['telefono'],
       email: json['email'],
       amigo: json['amigo'] != null ? Usuario.fromJson(json['amigo']) : null,
-      likes: (json['likes'] as List).map((likeJson) =>
-          Usuario.fromJson(likeJson)).toList(),
-      matches: (json['matches'] as List).map((matchJson) =>
-          Matches.fromJson(matchJson)).toList(),
-      chats: List<String>.from(json['chats']),
+      likes: (json['likes'] as List).map((likeJson) => Usuario.fromJson(likeJson)).toList(),
+      matches: (json['matches'] as List).map((matchJson) => Usuario.fromJson(matchJson)).toList(),
+      chats: List<Chat>.from(json['chats']),
       bio: json['bio'],
       intereses: json['intereses'],
       genero: json['genero'],
@@ -296,17 +286,15 @@ class Usuario {
     );
   }
 
-  String? getAmigoNombre(){
-    if(amigo == null){
-      return "No tiene amigo";
-    }
-    return amigo?.nombre;
+  String? getAmigoNombre() {
+    return amigo?.nombre ?? "No tiene amigo";
   }
 
-  String toString(){
-    return "Nombre: $nombre, Email: $email, Telefono: $telefono \n "
-        "bio: $bio intereses: $intereses genero: $genero edadInicial: $edadInicial \n "
-        "edadFinal: $edadFinal distanciaInicial: $distanciaInicial distanciaFinal: $distanciaFinal notificaciones: $notificaciones \n"
-        " privacidad: $privacidad region: $region idioma: $idioma imagenesInteligentes: $imagenesInteligentes Amigo: ${getAmigoNombre()}";
+  @override
+  String toString() {
+    return "Nombre: $nombre, Email: $email, Telefono: $telefono\n"
+        "bio: $bio intereses: $intereses genero: $genero edadInicial: $edadInicial\n"
+        "edadFinal: $edadFinal distanciaInicial: $distanciaInicial distanciaFinal: $distanciaFinal notificaciones: $notificaciones\n"
+        "privacidad: $privacidad region: $region idioma: $idioma imagenesInteligentes: $imagenesInteligentes Amigo: ${getAmigoNombre()}";
   }
 }

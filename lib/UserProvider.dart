@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
-import 'Matches.dart';
+import 'package:test_app/Chat.dart';
 import 'Usuario.dart';
 
 
 class UserManager extends ChangeNotifier {
   List<Usuario> _usuarios = [];
   Usuario? _currentUser;
+  Usuario? _chatUser;
+  List<Mensaje>? _mensajes = [];
+
+
+
+
 
   void initializeUsers(){
     Usuario user1 = Usuario(
@@ -107,18 +113,8 @@ class UserManager extends ChangeNotifier {
     user3.setLikes([user1]);
     user4.setLikes([user2]);
 
-    List<Matches> matches1 = [Matches(usuarios: [user3, user4])];
-    List<Matches> matches2 = [Matches(usuarios: [user1, user2])];
 
-    user1.setMatches(matches1);
-    user2.setMatches(matches1);
-    user3.setMatches(matches2);
-    user4.setMatches(matches2);
 
-    user1.setChats([user2.nombre, user3.nombre, user4.nombre]);
-    user2.setChats([user1.nombre, user3.nombre, user4.nombre]);
-    user3.setChats([user1.nombre, user2.nombre, user4.nombre]);
-    user4.setChats([user1.nombre, user2.nombre, user3.nombre]);
 
     _usuarios = [user1, user2, user3, user4];
     notifyListeners();
@@ -128,9 +124,10 @@ class UserManager extends ChangeNotifier {
 
 
 
-
   List<Usuario> get usuarios => _usuarios;
   Usuario? get currentUser => _currentUser;
+  Usuario? get chatUser => _chatUser;
+  List<Mensaje>? get mensajes => _mensajes;
 
   void addUsuario(Usuario usuario) {
     _usuarios.add(usuario);
@@ -150,7 +147,6 @@ class UserManager extends ChangeNotifier {
     }
   }
 
-
   void setUsuarios(List<Usuario> usuarios) {
     _usuarios = usuarios;
     notifyListeners();
@@ -163,6 +159,11 @@ class UserManager extends ChangeNotifier {
 
   void setCurrentUser(Usuario user) {
     _currentUser = user;
+    notifyListeners();
+  }
+
+  void setChatUser(Usuario user) {
+    _chatUser = user;
     notifyListeners();
   }
 
@@ -190,7 +191,38 @@ class UserManager extends ChangeNotifier {
   );
 
   void logout() {
-    _currentUser =  invitado;
+    _currentUser = invitado;
     notifyListeners();
+  }
+
+  void enviarMensaje(Mensaje message) {
+    Usuario currentUser = _currentUser!;
+    Usuario chatUser = _chatUser!;
+
+    // Busca el chat existente o crea uno nuevo si no existe
+    Chat chat = currentUser.chats.firstWhere(
+          (chat) => chat.usuarios!.contains(chatUser),
+      orElse: () {
+        Chat newChat = Chat(usuarios: [currentUser, chatUser], mensajes: []);
+        currentUser.chats.add(newChat);
+        chatUser.chats.add(newChat);
+        return newChat;
+      },
+    );
+
+    // Añade el mensaje al chat
+    chat.mensajes?.add(message);
+    notifyListeners();
+  }
+
+  List<Mensaje>? getMessages(Usuario? currentUser, Usuario? chatUser) {
+    if (currentUser == null || chatUser == null) {
+      return [];
+    }
+    Chat? chat = currentUser.chats.firstWhere(
+          (chat) => chat.usuarios!.contains(chatUser),
+      orElse: () => Chat(usuarios: [currentUser, chatUser], mensajes: []),
+    );
+    return chat.mensajes;
   }
 }

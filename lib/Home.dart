@@ -4,9 +4,9 @@ import 'package:test_app/UserProvider.dart';
 import 'package:test_app/Usuario.dart';
 import 'package:test_app/perfil.dart';
 import 'main.dart';
+import 'chat_individual.dart';  // Importa la nueva pantalla
 
 class PantallaPrincipal extends StatefulWidget {
-
   PantallaPrincipal({super.key,});
 
   @override
@@ -43,14 +43,9 @@ void mostrarIconoFlotante(BuildContext context, IconData icono, String mensaje) 
 class _PantallaPrincipalState extends State<PantallaPrincipal> {
   int indiceActual = 0;
 
-
-
-
   @override
   void initState() {
     super.initState();
-
-
   }
 
   final List<String> images = [
@@ -65,7 +60,6 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
     'Matches',
     'Perfil',
   ];
-
 
   @override
   Widget build(BuildContext context) {
@@ -287,8 +281,6 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
       const Center(child: Text('Perfil del usuario')),
     ];
 
-
-
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -296,8 +288,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
           IconButton(
             icon: const Icon(Icons.logout, color: Colors.white),
             onPressed: () {
-            Provider.of<UserManager>(context, listen: false).logout();
-
+              Provider.of<UserManager>(context, listen: false).logout();
               Navigator.push(context, MaterialPageRoute(builder: (context) => VistaInicial()));
             },
           ),
@@ -337,9 +328,17 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
               ),
             );
           }
+          // Nueva navegación a ChatIndividual
+          if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ChatIndividual(),
+              ),
+            );
+          }
         },
       ),
     );
   }
 }
-

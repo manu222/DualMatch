@@ -8,16 +8,19 @@ import 'settings_screen.dart';
 import 'Usuario.dart';
 
 class UserProfileScreen extends StatelessWidget {
+  UserProfileScreen({Key? key}) : super(key: key);
 
-
-   UserProfileScreen({
-    super.key,
-  });
   @override
   Widget build(BuildContext context) {
-
     List<Usuario>? usuarios = Provider.of<UserManager>(context).usuarios;
     Usuario? currentUser = Provider.of<UserManager>(context).currentUser;
+
+    List<String> imagenesPreSets = [
+      'assets/U1.jpg',
+      'assets/U2.jpg',
+      'assets/U3.jpg',
+      'assets/U4.jpg',
+    ];
 
     if (currentUser == null) {
       print('No hay usuario estamos en perfil.dart');
@@ -27,6 +30,17 @@ class UserProfileScreen extends StatelessWidget {
 
     for (Usuario user in usuarios) {
       print('Usuario: ${user.nombre}' + ' estamos en perfil.dart');
+    }
+
+    // Índice de la imagen del usuario actual
+    int currentUserImageIndex = -1;
+    if (currentUser != null) {
+      for (int i = 0; i < 3; i++) {
+        if (usuarios[i].nombre == currentUser.nombre) {
+          currentUserImageIndex = i;
+          break;
+        }
+      }
     }
 
     return Scaffold(
@@ -70,7 +84,14 @@ class UserProfileScreen extends StatelessWidget {
                       radius: 150,
                       backgroundColor: Colors.grey,
                       child: ClipOval(
-                        child: Image.asset(
+                        child: currentUserImageIndex != -1
+                            ? Image.asset(
+                          imagenesPreSets[currentUserImageIndex],
+                          width: 300,
+                          height: 300,
+                          fit: BoxFit.cover,
+                        )
+                            : Image.asset(
                           'assets/icon.png',
                           width: 300,
                           height: 300,
@@ -121,19 +142,25 @@ class UserProfileScreen extends StatelessWidget {
           // Acción al presionar el botón
           if (text == 'Ajustes') {
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => SettingsScreen()));
+              context,
+              MaterialPageRoute(
+                builder: (context) => SettingsScreen(),
+              ),
+            );
           } else if (text == 'Editar perfil') {
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => EditProfileScreen(
-                    )
-                )
+              context,
+              MaterialPageRoute(
+                builder: (context) => EditProfileScreen(),
+              ),
             );
           } else if (text == 'Seguridad') {
-            Navigator.push(context,MaterialPageRoute(builder: (context) => SecurityScreen()));
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SecurityScreen(),
+              ),
+            );
           }
         },
       ),

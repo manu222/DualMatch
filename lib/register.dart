@@ -18,11 +18,9 @@ class RegisterScreen extends StatefulWidget {
 }
 
 bool userExists(List<Usuario> usuarios, String email) {
-  if (usuarios.isEmpty) {
-    return usuarios.any((user) => user.email == email);
-  }
-  return false;
+  return usuarios.any((user) => user.email == email);
 }
+
 
 class _RegisterScreenState extends State<RegisterScreen> {
 

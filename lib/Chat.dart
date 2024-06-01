@@ -1,25 +1,43 @@
 import 'Usuario.dart';
 
 class Mensaje {
-  final Usuario usuario;
-  final String texto;
+   Usuario? emisor;
+   Usuario? receptor;
+   String? texto;
 
-  Mensaje({
-    required this.usuario,
-    required this.texto,
-  });
+  Mensaje(this.emisor, this.receptor, this.texto);
+
 }
 
 class Chat {
-  final List<Usuario> usuarios;
-  final List<Mensaje> mensajes;
+   List<Usuario>? usuarios;
+   List<Mensaje>? mensajes;
 
   Chat({
     required this.usuarios,
     required this.mensajes,
   });
 
-  void enviarMensaje(Usuario usuario, String texto) {
-    mensajes.add(Mensaje(usuario: usuario, texto: texto));
+  void enviarMensaje(Mensaje mensaje) {
+    mensajes?.add(mensaje);
   }
+  //cargar mensajes
+  void cargarMensajes(List<Mensaje> mensajes) {
+    this.mensajes?.addAll(mensajes);
+  }
+
+  //obtener mensajes
+  List<Mensaje>? getMensajes() {
+    return mensajes;
+  }
+
+  //obtener usuarios
+  List<Usuario>? getUsuarios() {
+    return usuarios;
+  }
+
+  void addMensaje(Mensaje mensaje) {
+    mensajes?.add(mensaje);
+  }
+
 }
