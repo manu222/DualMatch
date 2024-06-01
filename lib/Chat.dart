@@ -9,6 +9,14 @@ class Mensaje {
 
 }
 
+class MensajeGroup {
+  final Usuario emisor;
+  final List<Usuario>? receptores;
+  final String? texto;
+
+  MensajeGroup({required this.emisor, this.receptores, this.texto});
+}
+
 class Chat {
    List<Usuario>? usuarios;
    List<Mensaje>? mensajes;

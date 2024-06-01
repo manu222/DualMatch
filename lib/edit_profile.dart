@@ -71,6 +71,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         _bioController.text = currentUser.bio ?? '';
         _selectedInterests = currentUser.intereses ?? [];
         _smartPhotosEnabled = currentUser.imagenesInteligentes ?? true;
+        _smartPhotosEnabled = currentUser.imagenesInteligentes ?? true;
         _duoController.text = currentUser.amigo?.email ?? '';
       }
     });
@@ -249,6 +250,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       );
                     } else {
                       currentUser.amigo = amigo;
+                      amigo.amigo = currentUser;
                     }
                   } else if (duo == currentUser.email) {
                     setState(() {

@@ -7,7 +7,9 @@ class UserManager extends ChangeNotifier {
   List<Usuario> _usuarios = [];
   Usuario? _currentUser;
   Usuario? _chatUser;
+  Usuario? _chatUser2;
   List<Mensaje>? _mensajes = [];
+  List<MensajeGroup>? _groupMessages = [];
 
 
 
@@ -127,7 +129,9 @@ class UserManager extends ChangeNotifier {
   List<Usuario> get usuarios => _usuarios;
   Usuario? get currentUser => _currentUser;
   Usuario? get chatUser => _chatUser;
+  Usuario? get chatUser2 => _chatUser2;
   List<Mensaje>? get mensajes => _mensajes;
+  List<MensajeGroup>? get groupMessages => _groupMessages;
 
   void addUsuario(Usuario usuario) {
     _usuarios.add(usuario);
@@ -224,5 +228,19 @@ class UserManager extends ChangeNotifier {
       orElse: () => Chat(usuarios: [currentUser, chatUser], mensajes: []),
     );
     return chat.mensajes;
+  }
+
+  void enviarMensajeGroup(MensajeGroup message) {
+    _groupMessages?.add(message);
+    notifyListeners();
+  }
+
+  List<MensajeGroup>? getGroupMessages(List<Usuario> participants) {
+    // Filtra los mensajes para aquellos que incluyen a todos los participantes
+    return _groupMessages?.where((message) {
+      final Set<String> participantNames = participants.map((u) => u.nombre).toSet();
+      final Set<String>? messageParticipantNames = message.receptores?.map((u) => u.nombre).toSet();
+      return participantNames.difference(messageParticipantNames!.cast<Object?>()).isEmpty;
+    }).toList();
   }
 }
