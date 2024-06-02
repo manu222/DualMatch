@@ -24,7 +24,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   // Edades de 18 a 100
   List<int> edades = [for (int i = 18; i <= 100; i += 1) i];
 
+
   double _currentSliderValue = 1;
+
+  RangeValues _currentRangeValues =  const RangeValues(18, 30);
 
 
   @override
@@ -32,11 +35,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
     List<Usuario>? usuarios = Provider.of<UserManager>(context).usuarios;
     Usuario? currentUser = Provider.of<UserManager>(context).currentUser;
 
+    currentUser?.edadInicial = 18;
+    currentUser?.edadFinal = 30;
 
     currentUser?.privacidad = 'Público';
 
-
-    RangeValues _currentRangeValues =  RangeValues(currentUser?.edadInicial?.toDouble() ?? 18, currentUser?.edadFinal?.toDouble() ?? 30);
 
     if (currentUser == null) {
       print('No hay usuario estamos en SettingsScreen.dart');
