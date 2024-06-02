@@ -219,6 +219,11 @@ class UserManager extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setIdioma(String idioma) {
+    _currentUser?.idioma = idioma;
+    notifyListeners();
+  }
+
   List<Mensaje>? getMessages(Usuario? currentUser, Usuario? chatUser) {
     if (currentUser == null || chatUser == null) {
       return [];
